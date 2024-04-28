@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Topbar from "../../components/Layouts/Topbar";
 import Search from "../../utils/Search";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
@@ -18,6 +18,7 @@ import { briefcaseSvg } from "../../svg";
 import cta1 from "../../assets/cta1.png";
 import cta2 from "../../assets/cta2.png";
 import SendIcon from "@mui/icons-material/Send";
+import { useNavigate } from "react-router-dom";
 
 const mockData = [
   { title: "Total Jobs", count: 200000, img: briefcaseSvg },
@@ -27,11 +28,46 @@ const mockData = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisible1, setIsVisible1] = useState(false);
+  const [isVisible2, setIsVisible2] = useState(false);
+  const cta1Ref = useRef(null);
+  const cta2Ref = useRef(null);
 
   useEffect(() => {
     setIsVisible(true); // Set isVisible to true when component mounts
   }, []);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.2, // Trigger when 20% of the element is visible
+    };
+
+    const callback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.target === cta1Ref.current) {
+          setIsVisible1(entry.isIntersecting);
+        } else if (entry.target === cta2Ref.current) {
+          setIsVisible2(entry.isIntersecting);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(cta1Ref.current);
+    observer.observe(cta2Ref.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  const handleClick = () => {
+    navigate("/signup");
+  };
+
   return (
     <div>
       <Topbar />
@@ -189,7 +225,7 @@ const Index = () => {
           alignItems="center"
         >
           <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid item xs={12} sm={6} md={6} ref={cta1Ref}>
               <Box
                 display="flex"
                 padding="50px"
@@ -203,6 +239,9 @@ const Index = () => {
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                   height: "100%",
+                  opacity: isVisible1 ? 1 : 0,
+                  transform: isVisible1 ? "translateX(0)" : "translateX(-100%)",
+                  transition: "opacity 1s ease, transform 1s ease",
                 }}
               >
                 <Box
@@ -237,13 +276,14 @@ const Index = () => {
                         color: "white", // Change text color to white on hover
                       },
                     }}
+                    onClick={handleClick}
                   >
                     Register Now
                   </Button>
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid item xs={12} sm={6} md={6} ref={cta2Ref}>
               <Box
                 display="flex"
                 padding="50px"
@@ -257,6 +297,9 @@ const Index = () => {
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                   height: "100%",
+                  opacity: isVisible2 ? 1 : 0,
+                  transform: isVisible2 ? "translateX(0)" : "translateX(100%)",
+                  transition: "opacity 1s ease, transform 1s ease",
                 }}
               >
                 <Box
@@ -291,6 +334,7 @@ const Index = () => {
                         color: "white", // Change text color to white on hover
                       },
                     }}
+                    onClick={handleClick}
                   >
                     Register Now
                   </Button>
