@@ -14,6 +14,7 @@ import JobList from "./pages/Employee/Job/JobList";
 import JobDetail from "./pages/Employee/Job/JobDetail";
 import SinglePost from "./pages/Employer/PostJob/SinglePost";
 import PostedJob from "./pages/Employee/Job/PostedJob";
+import Index from "./pages/HomePage/Index";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/employee/job-detail" element={<JobDetail />} />
         <Route path="/employer/job-post" element={<SinglePost />} />
         <Route path="/employer/job-posted" element={<PostedJob />} />
+        <Route path="/" element={<Index />} />
         {/* Default route */}
         <Route path="/*" element={<Navigate to="/signup" replace />} />
       </Routes>

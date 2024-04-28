@@ -4,7 +4,8 @@ import {
   Breadcrumbs,
   Grid,
   Link,
-  Stack,
+  MenuItem,
+  Select,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -13,7 +14,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Topbar = () => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [selectedBreadcrumb, setSelectedBreadcrumb] = useState(() => {
     // Initialize the selectedBreadcrumb state with the value from local storage
@@ -47,59 +48,48 @@ const Topbar = () => {
   }, [selectedBreadcrumb]);
 
   return (
-    <>
-      <Box
-        style={{
-          display: "flex",
-          height: "60px",
-          padding: "0px 83px 0px 50px",
-          justifyContent: "space-between",
-          alignItems: "center",
-          background: "var(--Gray-50, #F1F2F4)",
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={6}>
-            <Stack
-              spacing={2}
-              sx={{
-                isSmallScreen: {
-                  flexDirection: "column",
-                },
-              }}
+    <Box
+      sx={{
+        display: "flex",
+        height: "60px",
+        padding: "0px 16px",
+        justifyContent: "space-between",
+        alignItems: "center",
+        background: "var(--Gray-50, #F1F2F4)",
+      }}
+    >
+      {isSmallScreen ? (
+        <Select
+          value={selectedBreadcrumb}
+          onChange={(event) => setSelectedBreadcrumb(event.target.value)}
+          displayEmpty
+          inputProps={{ "aria-label": "breadcrumb" }}
+        >
+          {breadcrumbs.map((breadcrumb, index) => (
+            <MenuItem key={index} value={index}>
+              {breadcrumb.label}
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        <Breadcrumbs
+          separator={<NavigateNextIcon fontSize="small" />}
+          aria-label="breadcrumb"
+        >
+          {breadcrumbs.map((breadcrumb, index) => (
+            <Link
+              key={index}
+              underline="hover"
+              color={selectedBreadcrumb === index ? "primary" : "inherit"}
+              href={breadcrumb.href}
+              onClick={(event) => handleClick(event, index)}
             >
-              <Breadcrumbs separator="|" aria-label="breadcrumb">
-                {breadcrumbs.map((breadcrumb, index) => (
-                  <div key={index} style={{ position: "relative" }}>
-                    <Link
-                      underline="hover"
-                      color={
-                        selectedBreadcrumb === index ? "primary" : "inherit"
-                      }
-                      href={breadcrumb.href}
-                      onClick={(event) => handleClick(event, index)}
-                    >
-                      {breadcrumb.label}
-                    </Link>
-                    {selectedBreadcrumb === index && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: -18,
-                          left: 0,
-                          width: "100%",
-                          borderBottom: "2px solid blue",
-                        }}
-                      />
-                    )}
-                  </div>
-                ))}
-              </Breadcrumbs>
-            </Stack>
-          </Grid>
-        </Grid>
-      </Box>
-    </>
+              {breadcrumb.label}
+            </Link>
+          ))}
+        </Breadcrumbs>
+      )}
+    </Box>
   );
 };
 

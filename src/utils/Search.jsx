@@ -12,7 +12,7 @@ import briefcase1 from "../assets/briefcase1.png";
 const Search = ({ data, setData }) => {
   const handleSearch = (event) => {
     const keyword = event.target.value.toLowerCase();
-    const filteredData = data.filter(
+    const filteredData = data?.filter(
       (item) =>
         item.jobTitle.toLowerCase().includes(keyword) ||
         item.employmentType.toLowerCase().includes(keyword) ||
@@ -27,7 +27,7 @@ const Search = ({ data, setData }) => {
       spacing={2}
       alignItems="center"
       justifyContent="center"
-      sx={{ marginBottom: 2 }}
+      // sx={{ marginBottom: 2 }}
     >
       <Grid item>
         <Grid container alignItems="center" sx={{ margin: "20px" }}>
