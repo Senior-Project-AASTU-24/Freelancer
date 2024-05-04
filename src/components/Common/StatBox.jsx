@@ -46,7 +46,7 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
         <Box display="flex" alignItems="center" gap="10px">
           <Chip
             sx={{
-              borderRadius: "3px",
+              borderRadius: "40px",
               background: "var(--Success-50, #E7F6EA)",
             }}
             label={

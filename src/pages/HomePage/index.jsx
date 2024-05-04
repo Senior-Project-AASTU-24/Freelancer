@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Topbar from "../../components/Layouts/Topbar";
 import Search from "../../utils/Search";
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Grid, Stack, Typography } from "@mui/material";
 import {
   largeTypographyProps,
   mediumTypographyProps,
@@ -23,6 +23,13 @@ import cta1 from "../../assets/cta1.png";
 import cta2 from "../../assets/cta2.png";
 import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from "react-router-dom";
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import { ArrowForward, CalendarMonth, Google } from "@mui/icons-material";
+import AdsClickIcon from "@mui/icons-material/AdsClick";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import star from "../../assets/star.png";
+import employersLogo from "../../assets/EmployersLogo.png";
+import google from "../../assets/google.png";
 
 const mockData = [
   { title: "Total Jobs", count: 200000, img: briefcaseSvg },
@@ -522,14 +529,20 @@ const Index = () => {
               </Box>
             </Grid>
             {/* Dotted arrow */}
-            <Grid item xs={12} sm={6} md={1} sx={{ position: "relative" }}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={1}
+              sx={{ position: "relative", marginTop: "50px" }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="150"
                 height="49"
                 viewBox="0 0 223 49"
                 fill="none"
-                style={{ position: "absolute", bottom: "-20px" }}
+                style={{ bottom: "100px" }}
               >
                 <g opacity="0.4">
                   <path
@@ -715,6 +728,191 @@ const Index = () => {
                   Aliquam facilisis egestas sapien, nec tempor leo tristique at.
                 </Typography>
               </Box>
+            </Grid>
+          </Grid>
+        </Box>
+        {/* Featured Job */}
+        <Box padding="50px 75px">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+
+            // sx={{ background: "rgba(241, 242, 244, 0.60)" }}
+          >
+            <Typography {...largeTypographyProps}>Featured Jobs</Typography>
+            <Button
+              variant="outlined"
+              sx={{
+                "&:hover": {
+                  backgroundColor: "#1976d2",
+                  color: "#fff",
+                },
+                "&:hover, &:focus": {
+                  boxShadow: "none",
+                },
+              }}
+              onMouseOver={(e) => (e.target.style.backgroundColor = "#1976d2")}
+              onMouseOut={(e) =>
+                (e.target.style.backgroundColor = "transparent")
+              }
+            >
+              View All Jobs
+              <ArrowRightAltIcon />
+            </Button>
+          </Box>
+          <Stack spacing={2} sx={{ marginTop: 5 }}>
+            <Box
+              sx={{
+                marginTop: 4,
+                borderRadius: "8px",
+                transition: "box-shadow 0.3s, border-color 0.3s",
+                "&:hover": {
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)", // Add box shadow on hover
+                  borderColor: "#1976d2", // Change border color on hover
+                },
+                borderWidth: "1px", // Set initial border width
+                borderStyle: "solid", // Set initial border style
+                borderColor: "rgba(241, 242, 244, 0.60)", // Set initial border color
+              }}
+            >
+              <Grid container spacing={1} alignItems="center">
+                <Grid item xs={12} sm={6} md={2}>
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                    }}
+                    src={google}
+                    alt="job"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={7}>
+                  <Box display="flex" flexDirection="column">
+                    <Box display="flex" sx={{ marginBottom: 2 }}>
+                      <Typography
+                        {...mediumTypographyProps}
+                        sx={{ marginRight: 2 }}
+                      >
+                        Senior Programmer
+                      </Typography>
+                      <Chip
+                        sx={{
+                          borderRadius: "40px",
+                          background: "var(--Success-50, #E7F6EA)",
+                        }}
+                        label={
+                          <Typography
+                            color="var(--Success-500, #0BA02C)"
+                            fontFamily="Inter"
+                            fontSize="12px"
+                            fontStyle="normal"
+                            fontWeight="600"
+                            lineHeight="12px"
+                            textTransform="uppercase"
+                          >
+                            Part-time
+                          </Typography>
+                        }
+                      />
+                    </Box>
+                    <Box display="flex">
+                      <Typography
+                        sx={{ marginRight: 2 }}
+                        {...smallTypographyProps}
+                      >
+                        $ 10000 - 12000
+                      </Typography>
+                      <CalendarMonth />
+                      <Typography {...smallTypographyProps}>
+                        1 month ago
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  container
+                  justifyContent="flex-end"
+                >
+                  <IconButton>
+                    <BookmarkIcon />
+                  </IconButton>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      background: "#E7F0FA",
+                      marginRight: 2,
+                      "&:hover": {
+                        backgroundColor: "#1976d2",
+                        color: "#fff",
+                      },
+                      "&:hover, &:focus": {
+                        boxShadow: "none",
+                      },
+                    }}
+                    onMouseOver={(e) =>
+                      (e.target.style.backgroundColor = "#1976d2")
+                    }
+                    onMouseOut={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    Apply Now
+                    <ArrowRightAltIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Stack>
+        </Box>
+        {/* Most popular vacancies */}
+        <Box
+          display="flex"
+          flexDirection="column"
+          padding="50px 75px"
+          sx={{ background: "rgba(241, 242, 244, 0.60)" }}
+        >
+          <Typography {...largeTypographyProps} sx={{ marginBottom: 6 }}>
+            Most Popular Vacancies
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography {...mediumTypographyProps} sx={{ marginBottom: 3 }}>
+                Frontend Developer
+              </Typography>
+              <Typography {...smallTypographyProps}>
+                1000+ Trending Jobs
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography {...mediumTypographyProps} sx={{ marginBottom: 3 }}>
+                Backend Developer
+              </Typography>
+              <Typography {...smallTypographyProps}>
+                1000+ Trending Jobs
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography {...mediumTypographyProps} sx={{ marginBottom: 3 }}>
+                UI designer
+              </Typography>
+              <Typography {...smallTypographyProps}>
+                1000+ Trending Jobs
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography {...mediumTypographyProps} sx={{ marginBottom: 3 }}>
+                AI Developer
+              </Typography>
+              <Typography {...smallTypographyProps}>
+                1000+ Trending Jobs
+              </Typography>
             </Grid>
           </Grid>
         </Box>
