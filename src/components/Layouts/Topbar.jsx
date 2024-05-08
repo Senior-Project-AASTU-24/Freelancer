@@ -1,28 +1,40 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Breadcrumbs,
-  Grid,
   Link,
   MenuItem,
   Select,
   Typography,
   useTheme,
+  Menu,
+  Popover,
+  ListItemIcon,
+  Divider,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import user from "../../assets/user.png";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
 
 const Topbar = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const navigate = useNavigate();
+
   const [selectedBreadcrumb, setSelectedBreadcrumb] = useState(() => {
-    // Initialize the selectedBreadcrumb state with the value from local storage
     const savedBreadcrumbIndex = localStorage.getItem("selectedBreadcrumb");
     return savedBreadcrumbIndex !== null
       ? parseInt(savedBreadcrumbIndex)
       : null;
   });
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
@@ -32,6 +44,7 @@ const Topbar = () => {
     },
     { label: "Find Job", href: "/employee/job-list" },
     { label: "Post Job", href: "/employer/job-post" },
+    { label: "Dashboard", href: "/employee/dashboard" },
   ];
 
   const handleClick = (event, index) => {
@@ -43,9 +56,22 @@ const Topbar = () => {
     }
   };
 
+  const handleAvatarClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   useEffect(() => {
     localStorage.setItem("selectedBreadcrumb", selectedBreadcrumb);
   }, [selectedBreadcrumb]);
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+    handleClose();
+  };
 
   return (
     <Box
@@ -89,6 +115,49 @@ const Topbar = () => {
           ))}
         </Breadcrumbs>
       )}
+      <Box sx={{ marginRight: "16px" }}>
+        <Avatar
+          alt="User Avatar"
+          src={user}
+          onClick={handleAvatarClick}
+          sx={{ cursor: "pointer" }}
+        />
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <MenuItem onClick={handleProfileClick}>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Box>
+        </Popover>
+      </Box>
     </Box>
   );
 };

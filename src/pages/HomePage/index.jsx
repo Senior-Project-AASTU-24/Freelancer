@@ -869,6 +869,114 @@ const Index = () => {
                 </Grid>
               </Grid>
             </Box>
+
+            <Box
+              sx={{
+                marginTop: 4,
+                borderRadius: "8px",
+                transition: "box-shadow 0.3s, border-color 0.3s",
+                "&:hover": {
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)", // Add box shadow on hover
+                  borderColor: "#1976d2", // Change border color on hover
+                },
+                borderWidth: "1px", // Set initial border width
+                borderStyle: "solid", // Set initial border style
+                borderColor: "rgba(241, 242, 244, 0.60)", // Set initial border color
+              }}
+            >
+              <Grid container spacing={1} alignItems="center">
+                <Grid item xs={12} sm={6} md={2}>
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                    }}
+                    src={google}
+                    alt="job"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={7}>
+                  <Box display="flex" flexDirection="column">
+                    <Box display="flex" sx={{ marginBottom: 2 }}>
+                      <Typography
+                        {...mediumTypographyProps}
+                        sx={{ marginRight: 2 }}
+                      >
+                        Senior Programmer
+                      </Typography>
+                      <Chip
+                        sx={{
+                          borderRadius: "40px",
+                          background: "var(--Success-50, #E7F6EA)",
+                        }}
+                        label={
+                          <Typography
+                            color="var(--Success-500, #0BA02C)"
+                            fontFamily="Inter"
+                            fontSize="12px"
+                            fontStyle="normal"
+                            fontWeight="600"
+                            lineHeight="12px"
+                            textTransform="uppercase"
+                          >
+                            Part-time
+                          </Typography>
+                        }
+                      />
+                    </Box>
+                    <Box display="flex">
+                      <Typography
+                        sx={{ marginRight: 2 }}
+                        {...smallTypographyProps}
+                      >
+                        $ 10000 - 12000
+                      </Typography>
+                      <CalendarMonth />
+                      <Typography {...smallTypographyProps}>
+                        1 month ago
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  container
+                  justifyContent="flex-end"
+                >
+                  <IconButton>
+                    <BookmarkIcon />
+                  </IconButton>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      background: "#E7F0FA",
+                      marginRight: 2,
+                      "&:hover": {
+                        backgroundColor: "#1976d2",
+                        color: "#fff",
+                      },
+                      "&:hover, &:focus": {
+                        boxShadow: "none",
+                      },
+                    }}
+                    onMouseOver={(e) =>
+                      (e.target.style.backgroundColor = "#1976d2")
+                    }
+                    onMouseOut={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    Apply Now
+                    <ArrowRightAltIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
           </Stack>
         </Box>
         {/* Most popular vacancies */}
@@ -887,7 +995,7 @@ const Index = () => {
                 Frontend Developer
               </Typography>
               <Typography {...smallTypographyProps}>
-                1000+ Trending Jobs
+                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -895,7 +1003,7 @@ const Index = () => {
                 Backend Developer
               </Typography>
               <Typography {...smallTypographyProps}>
-                1000+ Trending Jobs
+                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -903,7 +1011,7 @@ const Index = () => {
                 UI designer
               </Typography>
               <Typography {...smallTypographyProps}>
-                1000+ Trending Jobs
+                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -911,7 +1019,7 @@ const Index = () => {
                 AI Developer
               </Typography>
               <Typography {...smallTypographyProps}>
-                1000+ Trending Jobs
+                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
               </Typography>
             </Grid>
           </Grid>
