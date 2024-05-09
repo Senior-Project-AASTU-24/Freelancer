@@ -19,7 +19,7 @@ const Settings = () => {
     setValue(newValue);
   };
   return (
-    <Box marginTop={5} marginRight={3}>
+    <Box marginTop={5} marginRight={10}>
       <Typography {...mediumTypographyProps} sx={{ marginBottom: 3 }}>
         Hello, User
       </Typography>

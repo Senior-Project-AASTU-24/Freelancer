@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Topbar from "../../../components/Layouts/Topbar";
 import Search from "../../../utils/Search";
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -38,6 +38,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Overview from "./Overview";
 import AppliedJobs from "./AppliedJobs";
 import Settings from "./Settings";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const mockData = [
   { id: 1, name: "John Doe", position: "Software Engineer", status: "Applied" },
@@ -101,13 +102,19 @@ const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Overview");
 
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    setIsCollapsed(isSmallScreen);
+  }, [isSmallScreen]);
+
   console.log(selected);
   return (
     <>
       <Topbar />
       {/* <Search /> */}
       <Grid container spacing={0}>
-        <Grid item xs={12} sm={isCollapsed ? 1 : 3} md={isCollapsed ? 1 : 3}>
+        <Grid item xs={1} sm={isCollapsed ? 1 : 3} md={isCollapsed ? 1 : 3}>
           <Box
             sx={{
               display: "flex",
@@ -234,7 +241,7 @@ const Dashboard = () => {
             </ProSidebar>
           </Box>
         </Grid>
-        <Grid item xs={12} sm={isCollapsed ? 11 : 9} md={isCollapsed ? 11 : 9}>
+        <Grid item xs={10} sm={isCollapsed ? 11 : 9} md={isCollapsed ? 11 : 9}>
           {selected === "Overview" && <Overview />}
           {selected === "Applied Jobs" && <AppliedJobs />}
           {selected === "Settings" && <Settings />}
