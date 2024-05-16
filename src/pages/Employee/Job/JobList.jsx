@@ -35,7 +35,12 @@ const JobList = () => {
       <Topbar />
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Search data={mockUpDataJobs} setData={handleSearch} />
+          <Search
+            data={mockUpDataJobs}
+            setData={handleSearch}
+            placeholder="Search jobs..."
+            searchKeys={["jobTitle", "employmentType", "employerName"]}
+          />
         </Box>
         <Grid container spacing={2}>
           {currentItems.map((data, index) => (

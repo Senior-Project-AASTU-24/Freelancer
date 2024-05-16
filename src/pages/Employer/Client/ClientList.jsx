@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Search from "../../utils/Search";
-import StatBox from "../../components/Common/StatBox";
+import Search from "../../../utils/Search";
+import StatBox from "../../../components/Common/StatBox";
 import { Grid, Box, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
-import { mockupDataClient } from "../../data/mockData";
-import Footer from "../../components/Layouts/Footer";
+import { tokens } from "../../../theme";
+import { mockupDataClient } from "../../../data/mockData";
+import Footer from "../../../components/Layouts/Footer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Topbar from "../../components/Layouts/Topbar";
+import Topbar from "../../../components/Layouts/Topbar";
 
 const mockupData = mockupDataClient;
 
@@ -37,7 +37,12 @@ const ClientList = () => {
       <Topbar />
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Search data={mockupDataClient} setData={handleSearch} />
+          <Search
+            data={mockupData}
+            setData={handleSearch}
+            placeholder="Search jobs..."
+            searchKeys={["jobTitle", "employmentType", "employerName"]}
+          />
         </Box>
         <Grid container spacing={2}>
           {currentItems.map((data, index) => (

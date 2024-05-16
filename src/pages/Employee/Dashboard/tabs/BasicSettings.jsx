@@ -253,6 +253,7 @@ const BasicSettings = () => {
                     <div style={{ color: "red" }}>{errors.website}</div>
                   )}
                   <Button
+                    fullWidth
                     type="submit"
                     variant="contained"
                     color="primary"

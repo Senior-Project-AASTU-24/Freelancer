@@ -1,4 +1,5 @@
-import * as React from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
@@ -9,29 +10,24 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import briefcase1 from "../assets/briefcase1.png";
 
-const Search = ({ data, setData }) => {
+const Search = ({ data, setData, placeholder, searchKeys }) => {
   const handleSearch = (event) => {
     const keyword = event.target.value.toLowerCase();
-    const filteredData = data?.filter(
-      (item) =>
-        item.jobTitle.toLowerCase().includes(keyword) ||
-        item.employmentType.toLowerCase().includes(keyword) ||
-        item.employerName.toLowerCase().includes(keyword)
+    const filteredData = data?.filter((item) =>
+      searchKeys.some((key) => item[key]?.toLowerCase().includes(keyword))
     );
     setData(filteredData);
   };
 
   return (
-    <Grid
-      container
-      spacing={2}
-      alignItems="center"
-      justifyContent="center"
-      // sx={{ marginBottom: 2 }}
-    >
+    <Grid container spacing={2} alignItems="center" justifyContent="center">
       <Grid item>
         <Grid container alignItems="center" sx={{ margin: "20px" }}>
-          <img src={briefcase1} alt="briefcase" sx={{ marginRight: 1 }} />
+          <img
+            src={briefcase1}
+            alt="briefcase"
+            style={{ marginRight: "10px" }}
+          />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             FreeLancer
           </Typography>
@@ -50,8 +46,8 @@ const Search = ({ data, setData }) => {
           <InputBase
             type="search"
             sx={{ ml: 1, flex: 1 }}
-            placeholder="Job title, keyword, company"
-            inputProps={{ "aria-label": "Job title, keyword, company" }}
+            placeholder={placeholder}
+            inputProps={{ "aria-label": placeholder }}
             onChange={handleSearch}
           />
           <IconButton type="button" aria-label="search">
@@ -65,6 +61,17 @@ const Search = ({ data, setData }) => {
       </Grid>
     </Grid>
   );
+};
+
+Search.propTypes = {
+  data: PropTypes.array.isRequired,
+  setData: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  searchKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+Search.defaultProps = {
+  placeholder: "Search...",
 };
 
 export default Search;

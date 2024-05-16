@@ -9,6 +9,7 @@ import {
   useTheme,
   Grid,
   Divider,
+  Rating,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
@@ -39,6 +40,10 @@ import Overview from "./Overview";
 import AppliedJobs from "./AppliedJobs";
 import Settings from "./Settings";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import FavoriteJobs from "./FavoriteJobs";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import HireRequests from "./HireRequests";
+import miko from "../../../assets/miko.jpg";
 
 const mockData = [
   { id: 1, name: "John Doe", position: "Software Engineer", status: "Applied" },
@@ -174,26 +179,34 @@ const Dashboard = () => {
                 {!isCollapsed && (
                   <Grid container spacing={2}>
                     <Grid item xs={4}>
-                      {/* <img
-            alt="logo"
-            width="100px"
-            height="100px"
-            src={`../../assets/${logo}`}
-            style={{ cursor: "pointer", borderRadius: "50%" }}
-          /> */}
+                      <img
+                        src={miko}
+                        alt="ClientLogo"
+                        style={{
+                          padding: "12px",
+                          borderRadius: "80px",
+                          background: "var(--Gray-50, #EDEFF5)",
+                          maxWidth: "100px", // Set your desired max width here
+                          maxHeight: "100px",
+                        }}
+                      />
                     </Grid>
                     <Grid item xs={8}>
                       <Typography
                         variant="h2"
                         color="white"
                         fontWeight="bold"
-                        sx={{ m: "10px 0 0 0" }}
+                        sx={{ m: "5px 0 0 0" }}
                       >
-                        Ab
+                        User
                       </Typography>
-                      <Typography variant="h5" color={colors.blueAccent[500]}>
-                        Admin
-                      </Typography>
+                      <Rating
+                        name="simple-controlled"
+                        value={2}
+                        // onChange={(event, newValue) => {
+                        //   setValue(newValue);
+                        // }}
+                      />
                     </Grid>
                   </Grid>
                 )}
@@ -217,6 +230,13 @@ const Dashboard = () => {
                     title="Favorite Jobs"
                     to="/"
                     icon={<FavoriteIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
+                    title="Hire Requests"
+                    to="/"
+                    icon={<RemoveRedEyeIcon />}
                     selected={selected}
                     setSelected={setSelected}
                   />
@@ -245,6 +265,8 @@ const Dashboard = () => {
           {selected === "Overview" && <Overview />}
           {selected === "Applied Jobs" && <AppliedJobs />}
           {selected === "Settings" && <Settings />}
+          {selected === "Favorite Jobs" && <FavoriteJobs />}
+          {selected === "Hire Requests" && <HireRequests />}
         </Grid>
       </Grid>
     </>

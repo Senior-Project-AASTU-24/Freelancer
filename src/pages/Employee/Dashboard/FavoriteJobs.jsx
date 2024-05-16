@@ -34,7 +34,7 @@ const mockUpData = [
   // Add more mock data here
 ];
 
-const AppliedJobs = () => {
+const FavoriteJobs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -54,9 +54,6 @@ const AppliedJobs = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
   const columns = [
     { field: "job", headerName: "Job", width: 200 },
     { field: "dateApplied", headerName: "Date Applied", width: 200 },
@@ -68,7 +65,12 @@ const AppliedJobs = () => {
     <div>
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Search onSearch={handleSearch} />
+          <Search
+            data={mockUpData}
+            setData={setFilteredData}
+            placeholder="Search jobs..."
+            searchKeys={["job", "dateApplied", "status"]}
+          />
         </Box>
         <Box
           m="40px 0 0 0"
@@ -109,4 +111,4 @@ const AppliedJobs = () => {
   );
 };
 
-export default AppliedJobs;
+export default FavoriteJobs;
