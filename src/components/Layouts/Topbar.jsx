@@ -45,6 +45,7 @@ const Topbar = () => {
     { label: "Find Job", href: "/employee/job-list" },
     { label: "Post Job", href: "/employer/job-post" },
     { label: "Dashboard", href: "/employee/dashboard" },
+    { label: "Dashboard Employer", href: "/employer/dashboard" },
   ];
 
   const handleClick = (event, index) => {
