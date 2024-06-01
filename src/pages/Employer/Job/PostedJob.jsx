@@ -5,12 +5,8 @@ import {
   Box,
   Button,
   Divider,
-  FormControl,
   Grid,
   IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
   Link,
   TextField,
   Typography,
@@ -31,7 +27,6 @@ import Milestones from "./fragments/Milestones";
 import { tokens } from "../../../theme";
 import ChatModal from "./fragments/ChatModal";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import AddLinkIcon from "@mui/icons-material/AddLink";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -66,14 +61,13 @@ const initialMilestones = [
   // Add more milestones as needed
 ];
 
-const PostedJobEmployee = () => {
+const PostedJob = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [milestones, setMilestones] = useState(initialMilestones);
   const [currentMilestoneIndex, setCurrentMilestoneIndex] = useState(0);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-  const [githubLink, setGithubLink] = useState("");
 
   const handleCheckboxChange = (milestoneId, taskId) => {
     setMilestones((prevMilestones) =>
@@ -92,13 +86,6 @@ const PostedJobEmployee = () => {
 
   const handleCompleteClick = () => {
     if (currentMilestoneIndex < milestones.length - 1) {
-      console.log("Current Milestone:", milestones[currentMilestoneIndex]);
-      console.log(
-        "Completed Tasks:",
-        milestones[currentMilestoneIndex].tasks.filter((task) => task.checked)
-      );
-      console.log("GitHub Link:", githubLink);
-
       setCurrentMilestoneIndex(currentMilestoneIndex + 1);
     }
   };
@@ -210,38 +197,21 @@ const PostedJobEmployee = () => {
 
         <Box marginTop={3}>
           <Typography {...mediumTypographyProps}>Github Link</Typography>
-          {/* <Link
+          <Link
             href="https://github.com/Kidusfikru/Senior-Project"
             underline="hover"
           >
             {"https://github.com/Kidusfikru/Senior-Project"}
-          </Link> */}
-          <FormControl variant="standard" fullWidth>
-            {/* <InputLabel htmlFor="input-with-icon-adornment">
-              With a start adornment
-            </InputLabel> */}
-            <Input
-              name="githubLink"
-              fullWidth
-              id="input-with-icon-adornment"
-              onChange={(e) => setGithubLink(e.target.value)}
-              startAdornment={
-                <InputAdornment position="start">
-                  <AddLinkIcon />
-                </InputAdornment>
-              }
-            />
-          </FormControl>
+          </Link>
         </Box>
         <Box margin={5}>
           <Divider />
         </Box>
         <Box margin={2} borderRadius={4}>
           <TextField
-            disabled
             fullWidth
             id="outlined-multiline-static"
-            label="Previous comment ..."
+            label="Write your comment for this specific milestone..."
             multiline
             rows={5}
             sx={{
@@ -256,7 +226,7 @@ const PostedJobEmployee = () => {
             variant="contained"
             color="primary"
             onClick={handleCompleteClick}
-            disabled={completedTasks < totalTasks || githubLink === ""}
+            disabled={completedTasks < totalTasks}
           >
             Complete Milestone
           </Button>
@@ -282,4 +252,4 @@ const PostedJobEmployee = () => {
   );
 };
 
-export default PostedJobEmployee;
+export default PostedJob;

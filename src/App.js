@@ -14,7 +14,8 @@ import JobList from "./pages/Employee/Job/JobList";
 import JobDetail from "./pages/Employee/Job/JobDetail";
 import ClientDetail from "./pages/Employer/Client/ClientDetail";
 import SinglePost from "./pages/Employer/PostJob/SinglePost";
-import PostedJob from "./pages/Employee/Job/PostedJob";
+import PostedJob from "./pages/Employer/Job/PostedJob";
+import PostedJobEmployee from "./pages/Employee/Job/PostedJob";
 import Index from "./pages/HomePage/Index";
 import Dashboard from "./pages/Employee/Dashboard/Dashboard";
 import DashboardEmployer from "./pages/Employer/Dashboard/Dashboard";
@@ -46,6 +47,7 @@ function App() {
         <Route path="/employer/client-detail" element={<ClientDetail />} />
         <Route path="/employer/job-post" element={<SinglePost />} />
         <Route path="/employer/job-posted" element={<PostedJob />} />
+        <Route path="/employee/job-posted" element={<PostedJobEmployee />} />
         <Route path="/employee/dashboard" element={<Dashboard />} />
         <Route path="/employer/dashboard" element={<DashboardEmployer />} />
 
