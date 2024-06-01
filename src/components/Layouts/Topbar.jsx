@@ -20,9 +20,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import i18n from "../../utils/i8n";
+import { useTranslation } from "react-i18next";
 
 const Topbar = () => {
   const theme = useTheme();
+
+  const { t } = useTranslation();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const navigate = useNavigate();
@@ -35,6 +39,7 @@ const Topbar = () => {
   });
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [language, setLanguage] = useState("en");
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
@@ -72,6 +77,11 @@ const Topbar = () => {
   const handleProfileClick = () => {
     navigate("/profile");
     handleClose();
+  };
+
+  const handleChangeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setLanguage(lng);
   };
 
   return (
@@ -116,49 +126,60 @@ const Topbar = () => {
           ))}
         </Breadcrumbs>
       )}
-      <Box sx={{ marginRight: "16px" }}>
-        <Avatar
-          alt="User Avatar"
-          src={user}
-          onClick={handleAvatarClick}
-          sx={{ cursor: "pointer" }}
-        />
-        <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ marginRight: "16px" }}>
+          <Avatar
+            alt="User Avatar"
+            src={user}
+            onClick={handleAvatarClick}
+            sx={{ cursor: "pointer" }}
+          />
+          <Popover
+            open={Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <Box sx={{ p: 2 }}>
+              <MenuItem onClick={handleProfileClick}>
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                Profile
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                Settings
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Box>
+          </Popover>
+        </Box>
+        <Select
+          value={language}
+          onChange={(event) => handleChangeLanguage(event.target.value)}
+          displayEmpty
+          inputProps={{ "aria-label": "select language" }}
         >
-          <Box sx={{ p: 2 }}>
-            <MenuItem onClick={handleProfileClick}>
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              Profile
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </Box>
-        </Popover>
-      </Box>
+          <MenuItem value="en">English</MenuItem>
+          <MenuItem value="am">Amharic</MenuItem>
+        </Select>
+      </div>
     </Box>
   );
 };

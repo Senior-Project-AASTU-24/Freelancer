@@ -30,6 +30,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import star from "../../assets/star.png";
 import employersLogo from "../../assets/EmployersLogo.png";
 import google from "../../assets/google.png";
+import { useTranslation } from "react-i18next";
 
 const mockData = [
   { title: "Total Jobs", count: 200000, img: briefcaseSvg },
@@ -45,6 +46,7 @@ const Index = () => {
   const [isVisible2, setIsVisible2] = useState(false);
   const cta1Ref = useRef(null);
   const cta2Ref = useRef(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsVisible(true); // Set isVisible to true when component mounts
@@ -118,8 +120,7 @@ const Index = () => {
                     transition: "opacity 1s ease, transform 1s ease",
                   }}
                 >
-                  {" "}
-                  Find a job that suits your interest & skills.{" "}
+                  {t("Find a job that suits your interest & skills.")}
                 </Typography>
                 <Typography
                   color="var(--Gray-900, #18191C)" /* Display/01 */
