@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navigate,
   Route,
@@ -19,8 +19,33 @@ import PostedJobEmployee from "./pages/Employee/Job/PostedJob";
 import Index from "./pages/HomePage/Index";
 import Dashboard from "./pages/Employee/Dashboard/Dashboard";
 import DashboardEmployer from "./pages/Employer/Dashboard/Dashboard";
+import FacebookSignup from "./components/auth/FacebookSignup";
 
 function App() {
+  useEffect(() => {
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: "981890476922376", // Replace with your Facebook App ID
+        cookie: true,
+        xfbml: true,
+        version: "v12.0",
+      });
+      window.FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+  }, []);
+
   return (
     <Router>
       <CssBaseline />
@@ -50,6 +75,7 @@ function App() {
         <Route path="/employee/job-posted" element={<PostedJobEmployee />} />
         <Route path="/employee/dashboard" element={<Dashboard />} />
         <Route path="/employer/dashboard" element={<DashboardEmployer />} />
+        <Route path="/facebook" element={<FacebookSignup />} />
 
         <Route path="/" element={<Index />} />
         {/* Default route */}
