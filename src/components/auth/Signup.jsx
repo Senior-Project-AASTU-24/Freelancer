@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { GoogleLogin } from "@react-oauth/google";
+import { FacebookLoginButton } from "react-social-login-buttons";
 
 const Signup = () => {
   const theme = useTheme();
@@ -82,7 +84,7 @@ const Signup = () => {
   useEffect(() => {
     window.fbAsyncInit = function () {
       window.FB.init({
-        appId: "YOUR_APP_ID", // Replace with your Facebook App ID
+        appId: "256363950903213", // Replace with your Facebook App ID
         cookie: true,
         xfbml: true,
         version: "v12.0",
@@ -102,6 +104,25 @@ const Signup = () => {
       fjs.parentNode.insertBefore(js, fjs);
     })(document, "script", "facebook-jssdk");
   }, []);
+
+  const responseFacebook = (response) => {
+    console.log(response);
+    if (response.accessToken) {
+      axios
+        .post("http://localhost:8000/social_auth/facebook/", {
+          accessToken: response.accessToken,
+        })
+        .then((res) => {
+          console.log(res.data);
+          navigate("/dashboard");
+        })
+        .catch((error) => {
+          console.error("Error:", error.response.data);
+        });
+    } else {
+      console.log("User cancelled login or did not fully authorize.");
+    }
+  };
 
   return (
     <div>
@@ -305,45 +326,64 @@ const Signup = () => {
                   </Divider>
                 </Box>
                 <Box display="grid" gap="10px" mt="20px">
-                  <Button
-                    variant="contained"
-                    style={{
-                      height: "45px",
-                      backgroundColor: "#3B5998",
-                      color: "white",
-                    }}
-                    onClick={handleFacebookLogin}
-                  >
-                    <Typography
-                      variant="button"
-                      display="block"
-                      gutterBottom
-                      fontWeight="bold"
-                    >
-                      Facebook
-                    </Typography>
-                  </Button>
+                  <FacebookLoginButton
+                    appId="256363950903213"
+                    autoLoad={false}
+                    fields="name,email,picture"
+                    callback={responseFacebook}
+                    render={(renderProps) => (
+                      <Button
+                        onClick={renderProps.onClick}
+                        variant="contained"
+                        style={{
+                          height: "45px",
+                          backgroundColor: "#3B5998",
+                          color: "white",
+                        }}
+                      >
+                        <Typography
+                          variant="button"
+                          display="block"
+                          gutterBottom
+                          fontWeight="bold"
+                        >
+                          Facebook
+                        </Typography>
+                      </Button>
+                    )}
+                  />
                 </Box>
                 <Box display="grid" gap="10px" mt="20px">
-                  <Button
-                    variant="contained"
-                    style={{
-                      height: "45px",
-                      backgroundColor: "#DB4437",
-                      color: "white",
+                  <GoogleLogin
+                    onSuccess={(response) => {
+                      console.log(response);
+                      // Handle successful login here
                     }}
-                  >
-                    <Typography
-                      variant="button"
-                      display="block"
-                      gutterBottom
-                      fontWeight="bold"
-                    >
-                      <Link href="/google" color="#FFFFFF">
-                        Google
-                      </Link>
-                    </Typography>
-                  </Button>
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                    render={(renderProps) => (
+                      <Button
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                        variant="contained"
+                        style={{
+                          height: "45px",
+                          backgroundColor: "#DB4437",
+                          color: "white",
+                        }}
+                      >
+                        <Typography
+                          variant="button"
+                          display="block"
+                          gutterBottom
+                          fontWeight="bold"
+                        >
+                          Google
+                        </Typography>
+                      </Button>
+                    )}
+                  />
                 </Box>
                 <Box
                   display="grid"

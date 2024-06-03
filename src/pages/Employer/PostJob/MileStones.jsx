@@ -81,9 +81,9 @@ const MileStones = ({ setStatus }) => {
             {["Easy", "Medium", "Hard"].map((label, index) => {
               const value = label.toLowerCase().replace(" ", "-");
               const levelColors = {
-                easy: colors.greenAccent[500], // Accessing the green color from the theme
-                medium: colors.redAccent[700], // Accessing the yellow color from the theme
-                hard: colors.redAccent[500], // Accessing the red color from the theme
+                easy: colors.greenAccent[500],
+                medium: colors.redAccent[700],
+                hard: colors.redAccent[500],
               };
               return (
                 <Chip
