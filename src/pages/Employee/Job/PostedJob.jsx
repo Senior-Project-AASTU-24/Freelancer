@@ -1,4 +1,3 @@
-// PostedJob.js
 import React, { useState } from "react";
 import Topbar from "../../../components/Layouts/Topbar";
 import {
@@ -10,8 +9,6 @@ import {
   IconButton,
   Input,
   InputAdornment,
-  InputLabel,
-  Link,
   TextField,
   Typography,
   useTheme,
@@ -74,6 +71,8 @@ const PostedJobEmployee = () => {
   const [currentMilestoneIndex, setCurrentMilestoneIndex] = useState(0);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [githubLink, setGithubLink] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileError, setFileError] = useState("");
 
   const handleCheckboxChange = (milestoneId, taskId) => {
     setMilestones((prevMilestones) =>
@@ -100,6 +99,19 @@ const PostedJobEmployee = () => {
       console.log("GitHub Link:", githubLink);
 
       setCurrentMilestoneIndex(currentMilestoneIndex + 1);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        setFileError("File size exceeds 10 MB.");
+        setSelectedFile(null);
+      } else {
+        setFileError("");
+        setSelectedFile(file);
+      }
     }
   };
 
@@ -175,14 +187,14 @@ const PostedJobEmployee = () => {
                       fill="none"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M18.5655 74.7196C17.7847 80.1415 16.9463 84.2142 16.9463 84.2142L33.6573 84.2142L36.8982 61.7107H52.3375C63.2065 61.7107 72.0001 53.1311 72.0001 42.5477C72.0001 36.4543 69.1032 31.0392 64.583 27.5269L19.3751 30.7653"
                         fill="#5EA7FF"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M21.399 0H10.4692L0 74.4925H18.6212L22.4909 46.9577H40.4224C53.3811 46.9577 63.9038 36.4478 63.9038 23.4831V23.4788C63.9038 10.5033 53.3909 0 40.4224 0H21.399Z"
                         fill="#5B68C0"
                       />
@@ -210,16 +222,7 @@ const PostedJobEmployee = () => {
 
         <Box marginTop={3}>
           <Typography {...mediumTypographyProps}>Github Link</Typography>
-          {/* <Link
-            href="https://github.com/Kidusfikru/Senior-Project"
-            underline="hover"
-          >
-            {"https://github.com/Kidusfikru/Senior-Project"}
-          </Link> */}
           <FormControl variant="standard" fullWidth>
-            {/* <InputLabel htmlFor="input-with-icon-adornment">
-              With a start adornment
-            </InputLabel> */}
             <Input
               name="githubLink"
               fullWidth
@@ -232,6 +235,13 @@ const PostedJobEmployee = () => {
               }
             />
           </FormControl>
+          <Typography {...mediumTypographyProps}>Upload file</Typography>
+          <input
+            type="file"
+            accept=".zip,.rar,.7z,.tar"
+            onChange={handleFileChange}
+          />
+          {fileError && <Typography color="error">{fileError}</Typography>}
         </Box>
         <Box margin={5}>
           <Divider />
@@ -248,7 +258,6 @@ const PostedJobEmployee = () => {
               backgroundColor: colors.blueAccent[800],
               borderRadius: "8px",
             }}
-            // defaultValue="Default Value"
           />
         </Box>
         <Box display="flex" justifyContent="right" marginTop={3}>
@@ -256,7 +265,9 @@ const PostedJobEmployee = () => {
             variant="contained"
             color="primary"
             onClick={handleCompleteClick}
-            disabled={completedTasks < totalTasks || githubLink === ""}
+            disabled={
+              completedTasks < totalTasks || githubLink === "" || !selectedFile
+            }
           >
             Complete Milestone
           </Button>
