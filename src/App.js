@@ -20,7 +20,12 @@ import Index from "./pages/HomePage/Index";
 import Dashboard from "./pages/Employee/Dashboard/Dashboard";
 import DashboardEmployer from "./pages/Employer/Dashboard/Dashboard";
 import FacebookSignup from "./components/auth/FacebookSignup";
-import GoogleSignUp from "./components/auth/GoogleSignup";
+// import GoogleSignUp from "./components/auth/GoogleSignup";
+import { gapi } from "gapi-script";
+import Apply from "./pages/Employee/Job/Apply";
+
+const clientId =
+  "715184626890-0mfu0g0k0ap9r3oqetcmf8bsqcnu5aoj.apps.googleusercontent.com";
 
 function App() {
   // useEffect(() => {
@@ -46,6 +51,16 @@ function App() {
   //     fjs.parentNode.insertBefore(js, fjs);
   //   })(document, "script", "facebook-jssdk");
   // }, []);
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: clientId,
+        scope: "",
+      });
+    }
+    gapi.load("client:auth2", start);
+  });
 
   return (
     <Router>
@@ -77,7 +92,8 @@ function App() {
         <Route path="/employee/dashboard" element={<Dashboard />} />
         <Route path="/employer/dashboard" element={<DashboardEmployer />} />
         <Route path="/facebook" element={<FacebookSignup />} />
-        <Route path="/google" element={<GoogleSignUp />} />
+        <Route path="/employee/job-detail/apply" element={<Apply />} />
+        {/* <Route path="/google" element={<GoogleSignUp />} /> */}
 
         <Route path="/" element={<Index />} />
         {/* Default route */}

@@ -15,6 +15,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { GoogleLogin } from "@react-oauth/google";
 import { FacebookLoginButton } from "react-social-login-buttons";
 
+const clientId =
+  "715184626890-0mfu0g0k0ap9r3oqetcmf8bsqcnu5aoj.apps.googleusercontent.com";
+
 const Signup = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -326,7 +329,7 @@ const Signup = () => {
                   </Divider>
                 </Box>
                 <Box display="grid" gap="10px" mt="20px">
-                  <FacebookLoginButton
+                  {/* <FacebookLoginButton
                     appId="256363950903213"
                     autoLoad={false}
                     fields="name,email,picture"
@@ -351,13 +354,12 @@ const Signup = () => {
                         </Typography>
                       </Button>
                     )}
-                  />
+                  /> */}
                 </Box>
-                <Box display="grid" gap="10px" mt="20px">
+                <Box display="grid" gap="10px" mt="20px" width="100%">
                   <GoogleLogin
-                    onSuccess={(response) => {
-                      console.log(response);
-                      // Handle successful login here
+                    onSuccess={(credentialResponse) => {
+                      console.log(credentialResponse);
                     }}
                     onError={() => {
                       console.log("Login Failed");
@@ -366,6 +368,7 @@ const Signup = () => {
                       <Button
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
+                        fullWidth
                         variant="contained"
                         style={{
                           height: "45px",
@@ -384,6 +387,18 @@ const Signup = () => {
                       </Button>
                     )}
                   />
+
+                  {/* <Box fullWidth>
+                    <GoogleLogin
+                      fullWidth
+                      onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse);
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </Box> */}
                 </Box>
                 <Box
                   display="grid"

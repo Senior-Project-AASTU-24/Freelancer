@@ -16,8 +16,13 @@ import {
 } from "../../../Constants";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import Topbar from "../../../components/Layouts/Topbar";
+import { useNavigate } from "react-router-dom";
 
 const JobDetail = () => {
+  const navigate = useNavigate();
+  const handleApply = () => {
+    navigate("/employee/job-detail/apply");
+  };
   return (
     <div>
       <Topbar />
@@ -72,7 +77,9 @@ const JobDetail = () => {
                     <BookmarkIcon />
                   </IconButton>
                 </Box>
-                <Button variant="contained">Apply Now</Button>
+                <Button variant="contained" onClick={handleApply}>
+                  Apply Now
+                </Button>
               </Box>
             </Grid>
           </Grid>
