@@ -1,4 +1,3 @@
-// PostedJob.js
 import React, { useState } from "react";
 import Topbar from "../../../components/Layouts/Topbar";
 import {
