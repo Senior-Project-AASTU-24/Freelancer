@@ -17,7 +17,7 @@ import JobList from "./pages/Employee/Job/JobList";
 import JobDetail from "./pages/Employee/Job/JobDetail";
 import ClientDetail from "./pages/Employer/Client/ClientDetail";
 import SinglePost from "./pages/Employer/PostJob/SinglePost";
-import PostedJob from "./pages/Employee/Job/PostedJob";
+import PostedJob from "./pages/Employer/Job/PostedJob";
 import PostedJobEmployee from "./pages/Employee/Job/PostedJob";
 // import Index from "./pages/HomePage/Index";
 import Index from "./pages/HomePage/Index";
