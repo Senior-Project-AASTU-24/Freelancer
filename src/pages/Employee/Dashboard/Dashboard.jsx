@@ -38,12 +38,14 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Overview from "./Overview";
 import AppliedJobs from "./AppliedJobs";
+import AcceptedJobs from "./AcceptedJobs";
 import Settings from "./Settings";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import FavoriteJobs from "./FavoriteJobs";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import HireRequests from "./HireRequests";
 import miko from "../../../assets/miko.jpg";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 const mockData = [
   { id: 1, name: "John Doe", position: "Software Engineer", status: "Applied" },
@@ -227,6 +229,13 @@ const Dashboard = () => {
                     setSelected={setSelected}
                   />
                   <Item
+                    title="Accepted Jobs"
+                    to="/"
+                    icon={<ThumbUpAltIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                  <Item
                     title="Favorite Jobs"
                     to="/"
                     icon={<FavoriteIcon />}
@@ -264,6 +273,7 @@ const Dashboard = () => {
         <Grid item xs={10} sm={isCollapsed ? 11 : 9} md={isCollapsed ? 11 : 9}>
           {selected === "Overview" && <Overview />}
           {selected === "Applied Jobs" && <AppliedJobs />}
+          {selected === "Accepted Jobs" && <AcceptedJobs />}
           {selected === "Settings" && <Settings />}
           {selected === "Favorite Jobs" && <FavoriteJobs />}
           {selected === "Hire Requests" && <HireRequests />}
