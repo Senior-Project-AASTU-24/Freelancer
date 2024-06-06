@@ -16,6 +16,7 @@ import {
   Avatar,
   ListItemText,
 } from "@mui/material";
+import { useParams } from 'react-router-dom';
 import {
   mediumTypographyProps,
   salaryTypographyProps,
@@ -27,22 +28,39 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { tokens } from "../../../theme";
 import SchoolIcon from "@mui/icons-material/School";
 
-const ClientDetail = ({ match }) => {
-  const { id } = match.params;
+const ClientDetail = () => {
+  const { freelancerId } = useParams();
   const [freelancer, setFreelancer] = useState(null);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   useEffect(() => {
-    fetch(`http://localhost:8002/api/freelancers/${id}/`)
+    fetch(`http://localhost:8002/api/freelancers/${freelancerId}/`)
       .then((response) => response.json())
       .then((data) => setFreelancer(data))
       .catch((error) => console.error("Error fetching freelancer data:", error));
-  }, [id]);
+  }, [freelancerId]);
 
   if (!freelancer) {
     return <div>Loading...</div>;
   }
+
+  const mediumTypographyProps = {
+    variant: "h6",
+    component: "h2",
+    gutterBottom: true,
+  };
+
+  const smallTypographyProps = {
+    variant: "body2",
+    color: "textSecondary",
+  };
+
+  const salaryTypographyProps = {
+    variant: "h5",
+    component: "p",
+    color: "primary",
+  };
 
   return (
     <div>
@@ -75,7 +93,7 @@ const ClientDetail = ({ match }) => {
                   </Typography>
                   <Typography {...smallTypographyProps}>
                     <LocationOnIcon />
-                    {freelancer.Nationality}
+                    {freelancer.nationality}
                   </Typography>
                 </Box>
               </Box>
@@ -120,8 +138,8 @@ const ClientDetail = ({ match }) => {
                 </Typography>
                 <Divider sx={{ m: "10px" }} />
                 <Typography {...mediumTypographyProps}>Skills</Typography>
-                <Stack direction="row" spacing={1} sx={{ marginTop: 3 }}>
-                  {/* Assuming freelancer.skills is an array of skills */}
+                {/* Assuming freelancer.skills is an array of skills */}
+                {/* <Stack direction="row" spacing={1} sx={{ marginTop: 3 }}>
                   {freelancer.skills?.map((skill, index) => (
                     <Chip
                       key={index}
@@ -129,7 +147,7 @@ const ClientDetail = ({ match }) => {
                       sx={{ background: colors.blueAccent[600] }}
                     />
                   ))}
-                </Stack>
+                </Stack> */}
               </Box>
             </Grid>
             <Grid item xs={1} md={1}>
@@ -151,7 +169,7 @@ const ClientDetail = ({ match }) => {
                 <Box>
                   <Typography {...mediumTypographyProps}>Salary</Typography>
                   <Typography {...salaryTypographyProps}>
-                    {freelancer.salary_range}
+                    birr {freelancer.salary_range}
                   </Typography>
                 </Box>
                 <Divider
@@ -163,11 +181,9 @@ const ClientDetail = ({ match }) => {
                   }}
                 />
                 <Box>
-                  <Typography {...mediumTypographyProps}>
-                    Job Location
-                  </Typography>
+                  <Typography {...mediumTypographyProps}>Website</Typography>
                   <Typography {...smallTypographyProps}>
-                    {freelancer.location}
+                    {freelancer.website}
                   </Typography>
                 </Box>
               </Box>
@@ -190,7 +206,8 @@ const ClientDetail = ({ match }) => {
                 <Box display="flex" alignItems="center" gap={4}>
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                      {freelancer.education?.map((edu, index) => (
+                      {freelancer.education_level}
+                      {/* ?.map((edu, index) => (
                         <List key={index}>
                           <ListItem>
                             <ListItemAvatar>
@@ -204,7 +221,7 @@ const ClientDetail = ({ match }) => {
                             />
                           </ListItem>
                         </List>
-                      ))}
+                      )) */}
                     </Grid>
                   </Grid>
                 </Box>

@@ -7,6 +7,7 @@ import Footer from "../../../components/Layouts/Footer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Topbar from "../../../components/Layouts/Topbar";
+import { useNavigate } from 'react-router-dom';
 
 const ClientList = () => {
   const theme = useTheme();
@@ -15,6 +16,7 @@ const ClientList = () => {
   const [filteredData, setFilteredData] = useState([]);
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:8002/api/freelancers/")
@@ -39,6 +41,10 @@ const ClientList = () => {
     setCurrentPage(value);
   };
 
+  const handleFreelancerClick = (freelancerId) => {
+    navigate(`/employer/client-detail/${freelancerId}`);
+  };
+
   return (
     <div>
       <Topbar />
@@ -61,6 +67,7 @@ const ClientList = () => {
                   salary={freelancer.salary_range}
                   employerName={freelancer.name}
                   location={freelancer.location}
+                  onClick={() => handleFreelancerClick(freelancer.id)}
                 />
               </Box>
             </Grid>
