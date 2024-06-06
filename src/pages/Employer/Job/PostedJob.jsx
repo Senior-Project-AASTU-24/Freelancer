@@ -1,4 +1,3 @@
-// PostedJob.js
 import React, { useState } from "react";
 import Topbar from "../../../components/Layouts/Topbar";
 import {
@@ -60,6 +59,11 @@ const initialMilestones = [
   },
   // Add more milestones as needed
 ];
+
+const employee = {
+  name: "John Doe",
+  profilePicture: "https://randomuser",
+};
 
 const PostedJob = () => {
   const theme = useTheme();
@@ -188,6 +192,17 @@ const PostedJob = () => {
           />
         </Box>
         <Box marginTop={5}>
+          <Box marginTop={3}>
+            <Typography {...mediumTypographyProps}>
+              This job is done by{" "}
+              <Link
+                href="https://example.com/employee-profile"
+                underline="hover"
+              >
+                Employee Name
+              </Link>
+            </Typography>
+          </Box>
           <Milestones
             milestones={milestones}
             currentMilestoneIndex={currentMilestoneIndex}
@@ -207,6 +222,18 @@ const PostedJob = () => {
         <Box margin={5}>
           <Divider />
         </Box>
+
+        <Box marginTop={3}>
+          <Typography {...mediumTypographyProps}>Uploaded File</Typography>
+
+          <Link href="/mockFile.txt" download="mockFile.txt" underline="hover">
+            Download file
+          </Link>
+        </Box>
+        <Box margin={5}>
+          <Divider />
+        </Box>
+
         <Box margin={2} borderRadius={4}>
           <TextField
             fullWidth
