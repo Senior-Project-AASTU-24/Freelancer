@@ -1,38 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../../utils/Search";
 import StatBox from "../../../components/Common/StatBox";
-import { Grid, Box, useTheme } from "@mui/material";
+import { Grid, Box, useTheme, Button } from "@mui/material"; // Import Button
 import { tokens } from "../../../theme";
 import { mockUpDataJobs } from "../../../data/mockData";
 import Footer from "../../../components/Layouts/Footer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { DataGrid } from "@mui/x-data-grid";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../../../components/Common/ConfirmationModal";
 
-const mockUpData = [
-  {
-    id: 1,
-    job: "Software Engineer",
-    dateApplied: "2022-01-01",
-    status: "Applied",
-    action: "Accept",
-  },
-  {
-    id: 2,
-    job: "Web Developer",
-    dateApplied: "2022-01-02",
-    status: "In Progress",
-    action: "Accept",
-  },
-  {
-    id: 3,
-    job: "Data Analyst",
-    dateApplied: "2022-01-03",
-    status: "Rejected",
-    action: "Accept",
-  },
-  // Add more mock data here
-];
 
 const HireRequests = () => {
   const theme = useTheme();
@@ -40,14 +19,120 @@ const HireRequests = () => {
 
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(mockUpData);
+  const [filteredData, setFilteredData] = useState([]);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastMessageErr, setToastMessageErr] = useState("");
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [decline, setDecline] = useState(false);
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (toastMessage) {
+      toast.success(toastMessage);
+      setToastMessage(""); // Reset the toast message after displaying
+    }
+  }, [toastMessage]);
+
+  useEffect(() => {
+    if (toastMessageErr) {
+      toast.error(toastMessageErr);
+      setToastMessageErr(""); // Reset the toast message after displaying
+    }
+  }, [toastMessageErr]);
+
+  useEffect(() => {
+    fetch('http://localhost:8002/api/freelancers/employer/',{
+      method: "GET",
+      headers: {
+        'Authorization': `Bearer ${token}`  // Replace with your actual secret key
+      },
+    })
+      .then(response => response.json())
+      .then(data => setFilteredData(data))
+      .catch(error => console.error("Error fetching hire requests:", error));
+  }, [token]);
 
   const handleSearch = (searchQuery) => {
-    const filtered = mockUpData.filter((item) =>
-      item.job.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = filteredData.filter((item) =>
+      item.job_title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);
+  };
+
+  const handleAccept = (id, job, candidate) => {
+    setSelectedJob({ id, job, candidate });
+    setDecline(false);
+    setConfirmationOpen(true);
+  };
+
+  const handleDecline = (id, job, candidate) => {
+    setSelectedJob({ id, job, candidate });
+    setDecline(true);
+    setConfirmationOpen(true);
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const response = await fetch(`http://localhost:8002/api/accept-freelancer/${selectedJob.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Assuming you are storing the token in localStorage
+        },
+        body: JSON.stringify({ application_status: 'accepted' })
+      });
+  
+      if (response.ok) {
+        const updatedData = await response.json();
+        setToastMessage(
+          `You have accepted the application for ${selectedJob.candidate} for ${selectedJob.job}`
+        );
+        setFilteredData(prevData => prevData.map(item => item.id === selectedJob.id ? updatedData : item));
+      } else {
+        const errorData = await response.json();
+        setToastMessageErr(`Error: ${errorData.msg || 'Could not update application status'}`);
+      }
+    } catch (error) {
+      console.error("Error accepting application:", error);
+      setToastMessageErr('An unexpected error occurred');
+    }
+  
+    setConfirmationOpen(false);
+  };
+
+  const handleDeclineConfirm = async () => {
+    try {
+      const response = await fetch(`http://localhost:8002/api/decline-freelancer/${selectedJob.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Assuming you are storing the token in localStorage
+        },
+        body: JSON.stringify({ application_status: 'declined' })
+      });
+
+      if (response.ok) {
+        const updatedData = await response.json();
+        setToastMessageErr(
+          `You have declined the application for ${selectedJob.freelancer_name} for ${selectedJob.job_title}`
+        );
+        setFilteredData(prevData => prevData.map(item => item.id === selectedJob.id ? updatedData : item));
+      } else {
+        const errorData = await response.json();
+        setToastMessageErr(`Error: ${errorData.error || 'Failed to decline the application.'}`);
+      }
+    } catch (error) {
+      setToastMessageErr(`Error: ${error.message || 'Failed to decline the application.'}`);
+    } finally {
+      setConfirmationOpen(false);
+    }
+  };
+
+  const handleCloseConfirmation = () => {
+    setConfirmationOpen(false);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -55,10 +140,51 @@ const HireRequests = () => {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const columns = [
-    { field: "job", headerName: "Job", width: 200 },
+    { field: "freelancer_name", headerName: "Candidate", width: 200 },
+    { field: "job_title", headerName: "Job", width: 200 },
     { field: "dateApplied", headerName: "Date Applied", width: 200 },
-
-    { field: "action", headerName: "Action", width: 150 },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (params) => {
+        if (params.row.application_status === 'accepted') {
+          return (
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ textTransform: "none" }}
+              onClick={() => window.open(`/job/${params.row.job_id}`, '_blank')}
+            >
+              View Job
+            </Button>
+          );
+        } else if (params.row.application_status === 'declined') {
+          return <span>Application Declined</span>;
+        } else {
+          return (
+            <>
+              <Button
+                onClick={() => handleAccept(params.row.id, params.row.job_title, params.row.freelancer_name)}
+                variant="contained"
+                color="success"
+                style={{ textTransform: "none", marginRight: '8px' }}
+              >
+                Accept
+              </Button>
+              <Button
+                onClick={() => handleDecline(params.row.id, params.row.job_title, params.row.freelancer_name)}
+                variant="contained"
+                color="error"
+                style={{ textTransform: "none" }}
+              >
+                Decline
+              </Button>
+            </>
+          );
+        }
+      }
+    },
   ];
 
   return (
@@ -66,10 +192,10 @@ const HireRequests = () => {
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Search
-            data={mockUpData}
+            data={filteredData}
             setData={setFilteredData}
             placeholder="Search jobs..."
-            searchKeys={["job", "dateApplied", "status"]}
+            searchKeys={["job_title", "dateApplied", "application_status"]}
           />
         </Box>
         <Box
@@ -104,9 +230,28 @@ const HireRequests = () => {
             },
           }}
         >
-          <DataGrid rows={currentItems} columns={columns} />
+          <DataGrid
+            rows={currentItems}
+            columns={columns}
+            pageSize={itemsPerPage}
+            getRowId={(row) => row.id}
+            onPageChange={(params) => setCurrentPage(params.page + 1)}
+            pagination
+          />
         </Box>
       </Box>
+      <ToastContainer />
+      <ConfirmationModal
+        open={confirmationOpen}
+        onClose={handleCloseConfirmation}
+        onConfirm={decline ? handleDeclineConfirm : handleConfirm}
+        title="Confirm Action"
+        content={
+          decline
+            ? `Are you sure you want to decline the request by ${selectedJob ? selectedJob.candidate : ""}`
+            : `Are you sure you want to accept the request by ${selectedJob ? selectedJob.candidate : ""}?`
+        }
+      />
     </div>
   );
 };

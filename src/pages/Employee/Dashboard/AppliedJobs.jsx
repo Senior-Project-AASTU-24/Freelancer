@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../../utils/Search";
 import StatBox from "../../../components/Common/StatBox";
 import { Grid, Box, useTheme } from "@mui/material";
@@ -9,30 +9,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { DataGrid } from "@mui/x-data-grid";
 
-const mockUpData = [
-  {
-    id: 1,
-    job: "Software Engineer",
-    dateApplied: "2022-01-01",
-    status: "Applied",
-    action: "View",
-  },
-  {
-    id: 2,
-    job: "Web Developer",
-    dateApplied: "2022-01-02",
-    status: "In Progress",
-    action: "View",
-  },
-  {
-    id: 3,
-    job: "Data Analyst",
-    dateApplied: "2022-01-03",
-    status: "Rejected",
-    action: "View",
-  },
-  // Add more mock data here
-];
+
 
 const AppliedJobs = () => {
   const theme = useTheme();
@@ -40,11 +17,41 @@ const AppliedJobs = () => {
 
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(mockUpData);
+  const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState([]);
+  const token = localStorage.getItem('token');
+
+  // if (!token) {
+  //     alert('User not authenticated. Please log in.');
+  //     return;
+  // }
+
+  useEffect(() => {
+    // Fetch data from the endpoint using fetch
+    fetch("http://localhost:8002/api/freelancer-job-applications/", {
+      method: "GET",
+      headers: {
+        'Authorization': `Bearer ${token}`  // Replace with your actual secret key
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        setFilteredData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
 
   const handleSearch = (searchQuery) => {
-    const filtered = mockUpData.filter((item) =>
-      item.job.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = data.filter((item) =>
+      item.job_title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);
@@ -57,11 +64,12 @@ const AppliedJobs = () => {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
+
   const columns = [
-    { field: "job", headerName: "Job", width: 200 },
+    { field: "job_title", headerName: "Job", width: 200 },
     { field: "dateApplied", headerName: "Date Applied", width: 200 },
-    { field: "status", headerName: "Status", width: 150 },
-    { field: "action", headerName: "Action", width: 150 },
+    { field: "application_status", headerName: "Status", width: 150 },
+    // { field: "action", headerName: "Action", width: 150 },
   ];
 
   return (
@@ -102,7 +110,7 @@ const AppliedJobs = () => {
             },
           }}
         >
-          <DataGrid rows={currentItems} columns={columns} />
+          <DataGrid rows={currentItems} columns={columns} pageSize={itemsPerPage} pagination onPageChange={handlePageChange} />
         </Box>
       </Box>
     </div>

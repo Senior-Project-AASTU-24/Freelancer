@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../../utils/Search";
 import StatBox from "../../../components/Common/StatBox";
 import { Grid, Box, useTheme } from "@mui/material";
@@ -9,42 +9,40 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { DataGrid } from "@mui/x-data-grid";
 
-const mockUpData = [
-  {
-    id: 1,
-    job: "Software Engineer",
-    dateApplied: "2022-01-01",
-    status: "Applied",
-    action: "View",
-  },
-  {
-    id: 2,
-    job: "Web Developer",
-    dateApplied: "2022-01-02",
-    status: "In Progress",
-    action: "View",
-  },
-  {
-    id: 3,
-    job: "Data Analyst",
-    dateApplied: "2022-01-03",
-    status: "Rejected",
-    action: "View",
-  },
-  // Add more mock data here
-];
 
 const MyJobs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
+  const token = localStorage.getItem('token');
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(mockUpData);
+  const [jobData, setJobData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  // Fetch job data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8001/api/job-list-by-user/',{
+          method: "GET",
+          headers: {
+            'Authorization': `Bearer ${token}`  // Replace with your actual secret key
+          },
+        });
+        const data = await response.json();
+        setJobData(data);
+        setFilteredData(data);
+      } catch (error) {
+        console.error('Error fetching job data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSearch = (searchQuery) => {
-    const filtered = mockUpData.filter((item) =>
-      item.job.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = jobData.filter((item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);
@@ -57,11 +55,12 @@ const MyJobs = () => {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
+
   const columns = [
-    { field: "job", headerName: "Job", width: 200 },
-    { field: "dateApplied", headerName: "Date Applied", width: 200 },
-    { field: "status", headerName: "Status", width: 150 },
-    { field: "action", headerName: "Action", width: 150 },
+    { field: 'title', headerName: 'Job', width: 200 },
+    { field: 'posted_at', headerName: 'Date Posted', width: 200 },
+    { field: 'job_type', headerName: 'Job Type', width: 150 },
+    { field: 'max_budget', headerName: 'Max Budget', width: 150 },
   ];
 
   return (
@@ -74,30 +73,30 @@ const MyJobs = () => {
           m="40px 0 0 0"
           height="75vh"
           sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
+            '& .MuiDataGrid-root': {
+              border: 'none',
             },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
+            '& .MuiDataGrid-cell': {
+              borderBottom: 'none',
             },
-            "& .name-column--cell": {
+            '& .name-column--cell': {
               color: colors.greenAccent[300],
             },
-            "& .MuiDataGrid-columnHeaders": {
+            '& .MuiDataGrid-columnHeaders': {
               backgroundColor: colors.blueAccent[700],
-              borderBottom: "none",
+              borderBottom: 'none',
             },
-            "& .MuiDataGrid-virtualScroller": {
+            '& .MuiDataGrid-virtualScroller': {
               backgroundColor: colors.primary[400],
             },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
+            '& .MuiDataGrid-footerContainer': {
+              borderTop: 'none',
               backgroundColor: colors.blueAccent[700],
             },
-            "& .MuiCheckbox-root": {
+            '& .MuiCheckbox-root': {
               color: `${colors.greenAccent[200]} !important`,
             },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            '& .MuiDataGrid-toolbarContainer .MuiButton-text': {
               color: `${colors.grey[100]} !important`,
             },
           }}
