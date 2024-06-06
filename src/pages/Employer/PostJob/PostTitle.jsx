@@ -1,31 +1,37 @@
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { mediumTypographyProps } from "../../../Constants";
+import { useTranslation } from "react-i18next";
 
 const PostTitle = ({ setStatus, postData, setPostData }) => {
   const [title, setTitle] = useState(postData.title);
   const [description, setDescription] = useState(postData.description);
   const [isNextDisabled, setIsNextDisabled] = useState(true);
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     setIsNextDisabled(title.trim() === "" || description.trim() === "");
   }, [title, description]);
 
   const handleNextClick = async () => {
-    
     setPostData({ ...postData, title, description });
-    setStatus('jobType');
-
+    setStatus("jobType");
   };
-    
-  
 
   return (
     <div>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={5}>
-          <Typography fontFamily="Ink Free" fontSize="38px" fontStyle="normal" fontWeight={400} lineHeight="28px" sx={{ marginTop: "100px" }}>
-            Let’s Start By Adding a Title
+          <Typography
+            fontFamily="Ink Free"
+            fontSize="38px"
+            fontStyle="normal"
+            fontWeight={400}
+            lineHeight="28px"
+            sx={{ marginTop: "100px" }}
+          >
+            {t("Let’s Start By Adding a Title")}
           </Typography>
         </Grid>
         <Grid item md={1}>
@@ -33,7 +39,7 @@ const PostTitle = ({ setStatus, postData, setPostData }) => {
         </Grid>
         <Grid item xs={12} sm={4} md={5}>
           <Stack spacing={2}>
-            <Typography>Write a title for your job post</Typography>
+            <Typography>{t("Write a title for your job post")}</Typography>
             <TextField
               label="Title"
               variant="outlined"
@@ -41,7 +47,9 @@ const PostTitle = ({ setStatus, postData, setPostData }) => {
               onChange={(e) => setTitle(e.target.value)}
               required
             />
-            <Typography>Write a Description for your job post</Typography>
+            <Typography>
+              {t("Write a Description for your job post")}
+            </Typography>
             <TextField
               multiline
               maxRows={5}
@@ -69,7 +77,9 @@ const PostTitle = ({ setStatus, postData, setPostData }) => {
               },
             }}
           >
-            <Typography color={"white"} fontSize={"14px"}>Next</Typography>
+            <Typography color={"white"} fontSize={"14px"}>
+              {t("Next")}
+            </Typography>
           </Button>
         </Grid>
       </Grid>

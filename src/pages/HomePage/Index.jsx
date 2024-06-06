@@ -447,7 +447,9 @@ const Index = () => {
                   {t("Create account")}
                 </Typography>
                 <Typography {...smallTypographyProps}>
-                  Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                  {t(
+                    "Join our freelancer community to connect with clients and find exciting projects."
+                  )}
                 </Typography>
               </Box>
             </Grid>
@@ -528,7 +530,9 @@ const Index = () => {
                   Upload CV/Resume
                 </Typography>
                 <Typography {...smallTypographyProps}>
-                  Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                  {t(
+                    "Showcase your skills and experience by uploading your CV/Resume."
+                  )}
                 </Typography>
               </Box>
             </Grid>
@@ -640,7 +644,7 @@ const Index = () => {
                   Find suitable job
                 </Typography>
                 <Typography {...smallTypographyProps}>
-                  Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                  {t("Search for jobs that match your skills and interests.")}
                 </Typography>
               </Box>
             </Grid>
@@ -729,7 +733,7 @@ const Index = () => {
                 </Box>
                 <Typography {...mediumTypographyProps}>Apply job</Typography>
                 <Typography {...smallTypographyProps}>
-                  Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                  {t("Apply for jobs and start working on your terms.")}
                 </Typography>
               </Box>
             </Grid>
@@ -744,7 +748,9 @@ const Index = () => {
 
             // sx={{ background: "rgba(241, 242, 244, 0.60)" }}
           >
-            <Typography {...largeTypographyProps}>Featured Jobs</Typography>
+            <Typography {...largeTypographyProps}>
+              {t("Featured Jobs")}
+            </Typography>
             <Button
               variant="outlined"
               sx={{
@@ -761,7 +767,7 @@ const Index = () => {
                 (e.target.style.backgroundColor = "transparent")
               }
             >
-              View All Jobs
+              {t("View All Jobs")}
               <ArrowRightAltIcon />
             </Button>
           </Box>
@@ -867,7 +873,7 @@ const Index = () => {
                       (e.target.style.backgroundColor = "transparent")
                     }
                   >
-                    Apply Now
+                    {t("Apply Now")}
                     <ArrowRightAltIcon />
                   </Button>
                 </Grid>
@@ -975,7 +981,7 @@ const Index = () => {
                       (e.target.style.backgroundColor = "transparent")
                     }
                   >
-                    Apply Now
+                    {t("Apply Now")}
                     <ArrowRightAltIcon />
                   </Button>
                 </Grid>
@@ -991,7 +997,7 @@ const Index = () => {
           sx={{ background: "rgba(241, 242, 244, 0.60)" }}
         >
           <Typography {...largeTypographyProps} sx={{ marginBottom: 6 }}>
-            Most Popular Vacancies
+            {t("Most Popular Vacancies")}
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
@@ -999,7 +1005,9 @@ const Index = () => {
                 Frontend Developer
               </Typography>
               <Typography {...smallTypographyProps}>
-                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                {t(
+                  "Crafting captivating user experiences through innovative design and cutting-edge technology."
+                )}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -1007,7 +1015,9 @@ const Index = () => {
                 Backend Developer
               </Typography>
               <Typography {...smallTypographyProps}>
-                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                {t(
+                  "Building robust and scalable server-side applications to power the digital world."
+                )}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -1015,7 +1025,9 @@ const Index = () => {
                 UI designer
               </Typography>
               <Typography {...smallTypographyProps}>
-                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                {t(
+                  "Crafting visually appealing and intuitive user interfaces toenhance digital experiences."
+                )}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -1023,7 +1035,9 @@ const Index = () => {
                 AI Developer
               </Typography>
               <Typography {...smallTypographyProps}>
-                Aliquam facilisis egestas sapien, nec tempor leo tristique at.
+                {
+                  "Harnessing the power of machine learning and artificialintelligence to create intelligent solutions that automate tasks and drive innovation."
+                }
               </Typography>
             </Grid>
           </Grid>

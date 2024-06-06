@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { mediumTypographyProps } from "../../../Constants";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const MileStones = ({ setStatus, postData, setPostData }) => {
   const [milestones, setMilestones] = useState(postData.milestones);
@@ -24,19 +25,19 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
   }, [milestones, jobLevel]);
 
   const handleNextClick = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      alert('User not authenticated. Please log in.');
+      alert("User not authenticated. Please log in.");
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8001/api/job-post/', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8001/api/job-post/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           ...postData,
@@ -46,20 +47,22 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
       });
 
       if (response.ok) {
-        console.log('Job posted successfully:', await response.json());
-        navigate('/employee/job-list');
+        console.log("Job posted successfully:", await response.json());
+        navigate("/employee/job-list");
         // setStatus("milestones"); // If needed to proceed to the next step
       } else {
-        throw new Error('Failed to post job.');
+        throw new Error("Failed to post job.");
       }
     } catch (error) {
-      console.error('Error posting job:', error.message);
+      console.error("Error posting job:", error.message);
     }
   };
 
   const handleJobLevelClick = (event) => {
     setJobLevel(event.target.value);
   };
+
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -73,7 +76,7 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
             lineHeight="28px"
             sx={{ marginTop: "100px" }}
           >
-            Set Milestones and Job Level
+            {t("Set Milestones and Job Level")}
           </Typography>
         </Grid>
         <Grid item md={1}>
@@ -82,7 +85,7 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
         <Grid item xs={12} sm={4} md={5}>
           <Stack spacing={2}>
             <Typography {...mediumTypographyProps}>
-              Define the milestones for the job
+              {t("Define the milestones for the job")}
             </Typography>
             <TextField
               id="outlined-basic"
@@ -94,7 +97,7 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
               required
             />
             <Typography {...mediumTypographyProps}>
-              Define the job level
+              {t("Define the job level")}
             </Typography>
             <Select
               labelId="education-select-label"
@@ -103,9 +106,9 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
               label="Job Level"
               onChange={handleJobLevelClick}
             >
-              <MenuItem value="easy">Easy</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="hard">Hard</MenuItem>
+              <MenuItem value="easy">{t("Easy")}</MenuItem>
+              <MenuItem value="medium">{t("Medium")}</MenuItem>
+              <MenuItem value="hard">{t("Hard")}</MenuItem>
             </Select>
           </Stack>
         </Grid>
@@ -125,7 +128,7 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
             }}
           >
             <Typography color={"white"} fontSize={"14px"}>
-              Back
+              {t("Back")}
             </Typography>
           </Button>
         </Grid>
@@ -144,7 +147,7 @@ const MileStones = ({ setStatus, postData, setPostData }) => {
             }}
           >
             <Typography color={"white"} fontSize={"14px"}>
-              Submit
+              {t("Submit")}
             </Typography>
           </Button>
         </Grid>

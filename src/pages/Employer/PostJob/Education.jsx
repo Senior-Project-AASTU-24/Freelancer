@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { mediumTypographyProps } from "../../../Constants";
+import { useTranslation } from "react-i18next";
 
 const Education = ({ setStatus, postData, setPostData }) => {
   const [isNextDisabled, setIsNextDisabled] = useState(true);
@@ -20,12 +21,14 @@ const Education = ({ setStatus, postData, setPostData }) => {
 
   const handleNextClick = () => {
     setPostData({ ...postData, education });
-    setStatus("milestones");  
+    setStatus("milestones");
   };
 
   const handleEducationChange = (event) => {
     setEducation(event.target.value);
   };
+
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -39,7 +42,7 @@ const Education = ({ setStatus, postData, setPostData }) => {
             lineHeight="28px"
             sx={{ marginTop: "100px" }}
           >
-            Select Education Level
+            {t("Select Education Level")}
           </Typography>
         </Grid>
         <Grid item md={1}>
@@ -48,7 +51,7 @@ const Education = ({ setStatus, postData, setPostData }) => {
         <Grid item xs={12} sm={4} md={5}>
           <Stack spacing={2}>
             <Typography {...mediumTypographyProps}>
-              Select the minimum required education level
+              {t("Select the minimum required education level")}
             </Typography>
             <Select
               labelId="education-select-label"
@@ -57,11 +60,21 @@ const Education = ({ setStatus, postData, setPostData }) => {
               label="Education"
               onChange={handleEducationChange}
             >
-              <MenuItem value={"primary-education"}>Primary Education</MenuItem>
-              <MenuItem value={"higher-education"}>Higher Education</MenuItem>
-              <MenuItem value={"graduate-degree"}>Graduate Degree</MenuItem>
-              <MenuItem value={"masters-degree"}>Masters Degree</MenuItem>
-              <MenuItem value={"doctoral-degree"}>Doctoral Degree</MenuItem>
+              <MenuItem value={"primary-education"}>
+                {t("Primary Education")}
+              </MenuItem>
+              <MenuItem value={"higher-education"}>
+                {t("Higher Education")}
+              </MenuItem>
+              <MenuItem value={"graduate-degree"}>
+                {t("Graduate Degree")}
+              </MenuItem>
+              <MenuItem value={"masters-degree"}>
+                {t("Masters Degree")}
+              </MenuItem>
+              <MenuItem value={"doctoral-degree"}>
+                {t("Doctorate Degree")}
+              </MenuItem>
             </Select>
           </Stack>
         </Grid>
@@ -81,7 +94,7 @@ const Education = ({ setStatus, postData, setPostData }) => {
             }}
           >
             <Typography color={"white"} fontSize={"14px"}>
-              Back
+              {t("Back")}
             </Typography>
           </Button>
         </Grid>
@@ -100,7 +113,7 @@ const Education = ({ setStatus, postData, setPostData }) => {
             }}
           >
             <Typography color={"white"} fontSize={"14px"}>
-              Next
+              {t("Next")}
             </Typography>
           </Button>
         </Grid>

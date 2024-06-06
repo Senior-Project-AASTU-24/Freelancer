@@ -68,45 +68,45 @@ const Topbar = () => {
 
   const handleClose = async (e) => {
     e.preventDefault();
-  
-    const token = localStorage.getItem('token');
-  
+
+    const token = localStorage.getItem("token");
+
     if (!token) {
-      alert('User not authenticated. Please log in.');
+      alert("User not authenticated. Please log in.");
       return;
     }
-  
+
     // Ask the user for confirmation before logging out
-    const confirmed = window.confirm('Are you sure you want to logout?');
-  
+    const confirmed = window.confirm("Are you sure you want to logout?");
+
     if (!confirmed) {
       // If the user cancels the logout, simply close the menu and return
       setAnchorEl(null);
       return;
     }
-  
+
     try {
-      const response = await fetch('http://localhost:8000/api/logout/', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/api/logout/", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
-  
+
       if (response.ok) {
         // Clear the token from local storage
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         // Redirect to login page or home page
-        window.location.href = '/login';
+        window.location.href = "/login";
       } else {
         // Handle errors
-        console.error('Failed to logout:', response.statusText);
-        alert('Failed to logout. Please try again.');
+        console.error("Failed to logout:", response.statusText);
+        alert("Failed to logout. Please try again.");
       }
     } catch (error) {
-      console.error('An error occurred during logout:', error);
-      alert('An error occurred. Please try again.');
+      console.error("An error occurred during logout:", error);
+      alert("An error occurred. Please try again.");
     } finally {
       setAnchorEl(null);
     }
@@ -219,7 +219,7 @@ const Topbar = () => {
           inputProps={{ "aria-label": "select language" }}
         >
           <MenuItem value="en">English</MenuItem>
-          <MenuItem value="am">Amharic</MenuItem>
+          <MenuItem value="am">አማርኛ</MenuItem>
         </Select>
       </div>
     </Box>
