@@ -32,7 +32,7 @@ const AcceptedJobs = () => {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
-
+  // hey meti you can use this funtion to redirect to the specific job
   const handleButtonClick = (id) => {
     navigate(`/job/${id}`);
   };
