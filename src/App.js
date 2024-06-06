@@ -19,6 +19,7 @@ import ClientDetail from "./pages/Employer/Client/ClientDetail";
 import SinglePost from "./pages/Employer/PostJob/SinglePost";
 import PostedJob from "./pages/Employee/Job/PostedJob";
 import PostedJobEmployee from "./pages/Employee/Job/PostedJob";
+// import Index from "./pages/HomePage/Index";
 import Index from "./pages/HomePage/Index";
 import Dashboard from "./pages/Employee/Dashboard/Dashboard";
 import DashboardEmployer from "./pages/Employer/Dashboard/Dashboard";
@@ -26,8 +27,6 @@ import Payment from "./pages/Payment/Payment";
 import Thanks from "./pages/Payment/Thanks";
 import { gapi } from "gapi-script";
 import Apply from "./pages/Employee/Job/Apply";
-
-
 
 function App() {
   return (

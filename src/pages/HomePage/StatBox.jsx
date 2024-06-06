@@ -1,10 +1,12 @@
 import { Box, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { briefcaseSvg } from "../../svg";
+import { useTranslation } from "react-i18next";
 
 const StatBox = ({ img, title, numCount }) => {
   const [count, setCount] = useState(0);
   const targetCount = numCount;
+  const { t } = useTranslation();
 
   useEffect(() => {
     let start = 0;
@@ -87,7 +89,7 @@ const StatBox = ({ img, title, numCount }) => {
             line-height="24px"
           >
             {" "}
-            {title}
+            {t(title)}
           </Typography>
         </Box>
       </Paper>
