@@ -43,7 +43,7 @@ const HireRequests = () => {
   }, [toastMessageErr]);
 
   useEffect(() => {
-    fetch('http://localhost:8002/api/freelancers/employer/',{
+    fetch('http://localhost:8002/api/freelancers/employer/', {
       method: "GET",
       headers: {
         'Authorization': `Bearer ${token}`  // Replace with your actual secret key
@@ -64,7 +64,6 @@ const HireRequests = () => {
 
   const handleAccept = (id, job, candidate) => {
     setSelectedJob({ id, job, candidate });
-    setDecline(false);
     setConfirmationOpen(true);
   };
 
@@ -84,12 +83,11 @@ const HireRequests = () => {
         },
         body: JSON.stringify({ application_status: 'accepted' })
       });
-  
+
       if (response.ok) {
         const updatedData = await response.json();
-        setToastMessage(
-          `You have accepted the application for ${selectedJob.candidate} for ${selectedJob.job}`
-        );
+        setToastMessage(`You have accepted the application for ${selectedJob.candidate} for ${selectedJob.job}`);
+        // Optionally, update the state to reflect the changes
         setFilteredData(prevData => prevData.map(item => item.id === selectedJob.id ? updatedData : item));
       } else {
         const errorData = await response.json();
@@ -99,7 +97,7 @@ const HireRequests = () => {
       console.error("Error accepting application:", error);
       setToastMessageErr('An unexpected error occurred');
     }
-  
+
     setConfirmationOpen(false);
   };
 
@@ -109,17 +107,18 @@ const HireRequests = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Assuming you are storing the token in localStorage
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming you are storing the token in localStorage
         },
         body: JSON.stringify({ application_status: 'declined' })
       });
 
       if (response.ok) {
         const updatedData = await response.json();
-        setToastMessageErr(
-          `You have declined the application for ${selectedJob.freelancer_name} for ${selectedJob.job_title}`
+        setToastMessageErr(`You have declined the application for ${selectedJob.freelancer_name} for ${selectedJob.job_title}`);
+        // Update the state to reflect the changes
+        setFilteredData(prevData =>
+          prevData.map(item => (item.id === selectedJob.id ? updatedData : item))
         );
-        setFilteredData(prevData => prevData.map(item => item.id === selectedJob.id ? updatedData : item));
       } else {
         const errorData = await response.json();
         setToastMessageErr(`Error: ${errorData.error || 'Failed to decline the application.'}`);
@@ -144,46 +143,36 @@ const HireRequests = () => {
     { field: "job_title", headerName: "Job", width: 200 },
     { field: "dateApplied", headerName: "Date Applied", width: 200 },
     {
-      field: "action",
-      headerName: "Action",
-      width: 200,
-      renderCell: (params) => {
-        if (params.row.application_status === 'accepted') {
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ textTransform: "none" }}
-              onClick={() => window.open(`/job/${params.row.job_id}`, '_blank')}
-            >
-              View Job
-            </Button>
-          );
-        } else if (params.row.application_status === 'declined') {
-          return <span>Application Declined</span>;
-        } else {
-          return (
-            <>
-              <Button
-                onClick={() => handleAccept(params.row.id, params.row.job_title, params.row.freelancer_name)}
-                variant="contained"
-                color="success"
-                style={{ textTransform: "none", marginRight: '8px' }}
-              >
-                Accept
-              </Button>
-              <Button
-                onClick={() => handleDecline(params.row.id, params.row.job_title, params.row.freelancer_name)}
-                variant="contained"
-                color="error"
-                style={{ textTransform: "none" }}
-              >
-                Decline
-              </Button>
-            </>
-          );
-        }
-      }
+      field: "accept",
+      headerName: "Accept",
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          onClick={() =>
+            handleAccept(params.row.id, params.row.job_title, params.row.freelancer_name)
+          }
+          variant="contained"
+          color="success"
+          style={{ textTransform: "none" }}
+        >
+          Accept
+        </Button>
+      ),
+    },
+    {
+      field: "decline",
+      headerName: "Decline",
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          onClick={() => handleDecline(params.row.id, params.row.job_title, params.row.freelancer_name)}
+          variant="contained"
+          color="error"
+          style={{ textTransform: "none" }}
+        >
+          Decline
+        </Button>
+      ),
     },
   ];
 
@@ -248,8 +237,12 @@ const HireRequests = () => {
         title="Confirm Action"
         content={
           decline
-            ? `Are you sure you want to decline the request by ${selectedJob ? selectedJob.candidate : ""}`
-            : `Are you sure you want to accept the request by ${selectedJob ? selectedJob.candidate : ""}?`
+            ? `Are you sure you want to decline the request by ${
+                selectedJob ? selectedJob.candidate : ""
+              }`
+            : `Are you sure you want to accept the request by ${
+                selectedJob ? selectedJob.candidate : ""
+              }?`
         }
       />
     </div>

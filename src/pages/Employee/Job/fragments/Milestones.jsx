@@ -19,16 +19,18 @@ const Milestones = ({
   currentMilestoneIndex,
   handleCheckboxChange,
 }) => {
-  const currentMilestone = milestones[currentMilestoneIndex];
+  const currentMilestone = milestones[currentMilestoneIndex] || { tasks: [] };
   const completedTasks = currentMilestone.tasks.filter(
     (task) => task.checked
   ).length;
   const totalTasks = currentMilestone.tasks.length;
-  const progressValue = (completedTasks / totalTasks) * 100;
+  const progressValue = totalTasks ? (completedTasks / totalTasks) * 100 : 0;
 
   const completedMilestones = milestones.slice(0, currentMilestoneIndex).length;
   const totalMilestones = milestones.length;
-  const overallProgressValue = (completedMilestones / totalMilestones) * 100;
+  const overallProgressValue = totalMilestones
+    ? (completedMilestones / totalMilestones) * 100
+    : 0;
 
   return (
     <Box marginTop={5}>
@@ -53,7 +55,7 @@ const Milestones = ({
                 <Checkbox
                   checked={task.checked}
                   onChange={() =>
-                    handleCheckboxChange(currentMilestone.id, task.id)
+                    handleCheckboxChange(currentMilestoneIndex, task.id)
                   }
                 />
               }

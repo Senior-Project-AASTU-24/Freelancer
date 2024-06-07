@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Search from "../../../utils/Search";
+import { useNavigate } from "react-router-dom";
 import StatBox from "../../../components/Common/StatBox";
-import { Grid, Box, useTheme } from "@mui/material";
+import { Grid, Box, useTheme, Button } from "@mui/material";
 import { tokens } from "../../../theme";
 import { mockUpDataJobs } from "../../../data/mockData";
 import Footer from "../../../components/Layouts/Footer";
@@ -11,9 +12,11 @@ import { DataGrid } from "@mui/x-data-grid";
 
 
 
+
 const AppliedJobs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
 
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,17 +24,11 @@ const AppliedJobs = () => {
   const [data, setData] = useState([]);
   const token = localStorage.getItem('token');
 
-  // if (!token) {
-  //     alert('User not authenticated. Please log in.');
-  //     return;
-  // }
-
   useEffect(() => {
-    // Fetch data from the endpoint using fetch
     fetch("http://localhost:8002/api/freelancer-job-applications/", {
       method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`  // Replace with your actual secret key
+        'Authorization': `Bearer ${token}`
       },
     })
       .then((response) => {
@@ -47,7 +44,7 @@ const AppliedJobs = () => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-  }, []);
+  }, [token]);
 
   const handleSearch = (searchQuery) => {
     const filtered = data.filter((item) =>
@@ -65,11 +62,13 @@ const AppliedJobs = () => {
     setCurrentPage(value);
   };
 
+ 
+
   const columns = [
     { field: "job_title", headerName: "Job", width: 200 },
     { field: "dateApplied", headerName: "Date Applied", width: 200 },
     { field: "application_status", headerName: "Status", width: 150 },
-    // { field: "action", headerName: "Action", width: 150 },
+    
   ];
 
   return (
