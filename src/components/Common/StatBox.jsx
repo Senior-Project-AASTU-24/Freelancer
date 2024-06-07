@@ -1,12 +1,21 @@
+import React, { useState } from "react";
 import { Box, Typography, useTheme, IconButton } from "@mui/material";
 import { tokens } from "../../theme";
 import { Divider, Chip } from "@mui/material";
 import EmployersLogo from "../../assets/EmployersLogo.png";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
 const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [bookmarked, setBookmarked] = useState(false);
+
+  const handleBookmarkClick = () => {
+    setBookmarked(!bookmarked);
+    console.log(bookmarked ? "Bookmark removed" : "Bookmarked");
+  };
+
   return (
     <Box
       display="flex"
@@ -70,7 +79,7 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
               fontFamily: "Inter",
               fontSize: "14px",
               fontStyle: "normal",
-              fontWeight: 400,
+              fontWeight: "400",
               lineHeight: "20px",
             }}
           >
@@ -112,8 +121,12 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
             {employerName}
           </Typography>
         </Box>
-        <IconButton>
-          <BookmarkIcon />
+        <IconButton onClick={handleBookmarkClick}>
+          {bookmarked ? (
+            <BookmarkIcon sx={{ color: "gold" }} />
+          ) : (
+            <BookmarkBorderIcon />
+          )}
         </IconButton>
       </Box>
     </Box>
