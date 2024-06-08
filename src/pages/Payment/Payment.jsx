@@ -1,4 +1,4 @@
-import React, {useState}  from "react";
+import React, { useState } from "react";
 import Topbar from "../../components/Layouts/Topbar";
 import Pay from "./Pay";
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
@@ -10,6 +10,7 @@ import {
 } from "../../Constants";
 import Footer from "../../components/Layouts/Footer";
 import { useEffect } from "react";
+import { TextField, Container, Paper } from "@mui/material";
 
 // const Payment = () => {
 //   const [fname, setFname] = useState('');
@@ -103,13 +104,11 @@ import { useEffect } from "react";
 
 // export default Payment;
 
-
 const Payment = () => {
-  const [fname, setFname]= useState('')
-  const [lname, setLname]= useState('')
-  const [email, setEmail]= useState('')
-  const [amount, setAmount]= useState(50)
-
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [email, setEmail] = useState("");
+  const [amount, setAmount] = useState(50);
 
   const generateTxRef = () => {
     const timestamp = new Date().getTime();
@@ -117,37 +116,87 @@ const Payment = () => {
   };
 
   const tx_ref = generateTxRef();
-  const public_key= "CHAPUBK_TEST-5GtlNm51HozWFSZQYPGoAIsuaiZhs15i"
-    return (
-      <div>
-        <Topbar />
-        <br />
-        <div className="bg-green-200 h-screen flex justify-center items-center relative">
-          <div className="p-4 bg-white rounded shadow">
-            <center>
-                <label htmlFor="input"> First name</label>
-                <input placeholder="john" onChange= {(e)=>{setFname(e.target.value); console.log(fname); }} type="text" /><br />
-                <label htmlFor="input"> Last name</label>
-                <input placeholder="doe" onChange= {(e)=>{setLname(e.target.value); console.log(lname); }} type="text" /><br />
-                <label htmlFor="input"> Email </label>
-                <input placeholder="johndoe@example.com" onChange= {(e)=>{setEmail(e.target.value); console.log(email); }} type="email" /><br/>
-                <label htmlFor="input"> Amount </label>
-                <input placeholder="500" onChange= {(e)=>{setAmount(e.target.value); console.log(amount); }} type="number" />
-                <Pay 
-                  fname={fname} 
-                  lname={lname} 
-                  email={email} 
-                  amount={amount} 
-                  tx_ref={tx_ref} 
-                  public_key={public_key} /> <br />
-            </center>
-          </div>
-            
+  const public_key = "CHAPUBK_TEST-5GtlNm51HozWFSZQYPGoAIsuaiZhs15i";
+  return (
+    <div>
+      <Topbar />
+      <br />
+      <div className="bg-green-200 h-screen flex justify-center items-center relative">
+        <div className="p-4 bg-white rounded shadow">
+          <Container maxWidth="sm">
+            <Paper elevation={3} style={{ padding: "2rem", marginTop: "2rem" }}>
+              <Box
+                component="form"
+                sx={{
+                  "& .MuiTextField-root": { marginBottom: "1.5rem" },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <Typography variant="h4" gutterBottom>
+                  User Information
+                </Typography>
+                <TextField
+                  fullWidth
+                  label="First Name"
+                  placeholder="John"
+                  variant="outlined"
+                  onChange={(e) => {
+                    setFname(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  label="Last Name"
+                  placeholder="Doe"
+                  variant="outlined"
+                  onChange={(e) => {
+                    setLname(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  label="Email"
+                  placeholder="johndoe@example.com"
+                  variant="outlined"
+                  type="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                />
+                <TextField
+                  fullWidth
+                  label="Amount"
+                  placeholder="500"
+                  variant="outlined"
+                  type="number"
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                />
+              </Box>
+            </Paper>
+            <Box sx={{ width: "100%", mt: 2 }}>
+              <Pay
+                fname={fname}
+                lname={lname}
+                email={email}
+                amount={amount}
+                tx_ref={tx_ref}
+                public_key={public_key}
+              />
+            </Box>
+          </Container>
         </div>
-          
-        <Footer />
+      </div>
+
+      <Footer />
     </div>
   );
 };
 
-export default Payment;       
+export default Payment;

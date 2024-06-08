@@ -22,13 +22,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import i18n from "../../utils/i8n";
 import { useTranslation } from "react-i18next";
+import ConfirmationModal from "../Common/ConfirmationModal";
 
 const Topbar = () => {
   const theme = useTheme();
-
   const { t } = useTranslation();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
   const navigate = useNavigate();
 
   const [selectedBreadcrumb, setSelectedBreadcrumb] = useState(() => {
@@ -40,13 +39,11 @@ const Topbar = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [language, setLanguage] = useState("en");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    {
-      label: "Find FreeLancer",
-      href: "/employer/client-list",
-    },
+    { label: "Find FreeLancer", href: "/employer/client-list" },
     { label: "Find Job", href: "/employee/job-list" },
     { label: "Post Job", href: "/employer/job-post" },
     { label: "Dashboard", href: "/employee/dashboard" },
@@ -66,22 +63,11 @@ const Topbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = async (e) => {
-    e.preventDefault();
-
+  const handleLogout = async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
       alert("User not authenticated. Please log in.");
-      return;
-    }
-
-    // Ask the user for confirmation before logging out
-    const confirmed = window.confirm("Are you sure you want to logout?");
-
-    if (!confirmed) {
-      // If the user cancels the logout, simply close the menu and return
-      setAnchorEl(null);
       return;
     }
 
@@ -95,12 +81,9 @@ const Topbar = () => {
       });
 
       if (response.ok) {
-        // Clear the token from local storage
         localStorage.removeItem("token");
-        // Redirect to login page or home page
         window.location.href = "/login";
       } else {
-        // Handle errors
         console.error("Failed to logout:", response.statusText);
         alert("Failed to logout. Please try again.");
       }
@@ -109,7 +92,17 @@ const Topbar = () => {
       alert("An error occurred. Please try again.");
     } finally {
       setAnchorEl(null);
+      setIsModalOpen(false);
     }
+  };
+
+  const handleLogoutClick = () => {
+    setIsModalOpen(true);
+    setAnchorEl(null);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -118,7 +111,7 @@ const Topbar = () => {
 
   const handleProfileClick = () => {
     navigate("/profile");
-    handleClose();
+    setAnchorEl(null);
   };
 
   const handleChangeLanguage = (lng) => {
@@ -179,7 +172,7 @@ const Topbar = () => {
           <Popover
             open={Boolean(anchorEl)}
             anchorEl={anchorEl}
-            onClose={handleClose}
+            onClose={() => setAnchorEl(null)}
             anchorOrigin={{
               vertical: "bottom",
               horizontal: "right",
@@ -196,14 +189,14 @@ const Topbar = () => {
                 </ListItemIcon>
                 Profile
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem>
                 <ListItemIcon>
                   <SettingsIcon />
                 </ListItemIcon>
                 Settings
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleLogoutClick}>
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
@@ -222,6 +215,13 @@ const Topbar = () => {
           <MenuItem value="am">አማርኛ</MenuItem>
         </Select>
       </div>
+      <ConfirmationModal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleLogout}
+        title="Confirm Logout"
+        content="Are you sure you want to logout?"
+      />
     </Box>
   );
 };
