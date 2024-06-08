@@ -1,16 +1,23 @@
+import React, { useState } from "react";
 import { Box, Typography, useTheme, IconButton } from "@mui/material";
 import { tokens } from "../../theme";
 import { Divider, Chip } from "@mui/material";
 import EmployersLogo from "../../assets/EmployersLogo.png";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
-const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) => {
+const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [bookmarked, setBookmarked] = useState(false);
+
+  const handleBookmarkClick = () => {
+    setBookmarked(!bookmarked);
+    console.log(bookmarked ? "Bookmark removed" : "Bookmarked");
+  };
 
   return (
     <Box
-      onClick={onClick}
       display="flex"
       width="425px"
       padding="24px"
@@ -23,7 +30,6 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) =>
         background: "linear-gradient(90deg, #FFF6E6 0%, #FFF 100%), #FFF",
         boxShadow: "0px 2px 18px 0px rgba(24, 25, 28, 0.03)",
         transition: "transform 0.3s ease-in-out",
-        cursor: 'pointer',
         "&:hover": {
           transform: "scale(1.05)",
         },
@@ -69,10 +75,11 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) =>
           <Typography
             sx={{
               color: "var(--Gray-500, #767F8C)",
+              /* Body/Small/400 */
               fontFamily: "Inter",
               fontSize: "14px",
               fontStyle: "normal",
-              fontWeight: 400,
+              fontWeight: "400",
               lineHeight: "20px",
             }}
           >
@@ -81,6 +88,7 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) =>
         </Box>
       </Box>
 
+      {/* New Box for EmployersLogo, Typography, and BookmarkIcon */}
       <Box
         display="flex"
         justifyContent="space-between"
@@ -103,17 +111,22 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) =>
           />
           <Typography
             color="var(--Gray-900, #18191C)"
+            /* Body/Medium/500 */
             fontFamily="Inter"
             fontSize="16px"
             fontStyle="normal"
             fontWeight="500"
-            lineHeight="24px"
+            lineHeight="24px" /* 150% */
           >
             {employerName}
           </Typography>
         </Box>
-        <IconButton>
-          <BookmarkIcon />
+        <IconButton onClick={handleBookmarkClick}>
+          {bookmarked ? (
+            <BookmarkIcon sx={{ color: "gold" }} />
+          ) : (
+            <BookmarkBorderIcon />
+          )}
         </IconButton>
       </Box>
     </Box>

@@ -1,6 +1,5 @@
 // import React from "react";
 
-
 // const Pay = ({fname, lname, email, amount, tx_ref, public_key}) => {
 //     const form = document.createElement("form");
 //     return (
@@ -23,20 +22,23 @@
 //             <button type="submit">Pay Now</button>
 //         </form>
 //         </div>
-        
+
 //   );
 // };
 
 // export default Pay;
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { Box, Button, CircularProgress } from "@mui/material";
 
 const Pay = ({ fname, lname, email, amount, tx_ref, public_key }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [csrfToken, setCsrfToken] = useState('');
+  const [csrfToken, setCsrfToken] = useState("");
 
   useEffect(() => {
     const getCsrfToken = async () => {
-      const response = await fetch('http://localhost:8004/payment/get-csrf-token/');
+      const response = await fetch(
+        "http://localhost:8004/payment/get-csrf-token/"
+      );
       const data = await response.json();
       setCsrfToken(data.csrfToken);
     };
@@ -46,10 +48,10 @@ const Pay = ({ fname, lname, email, amount, tx_ref, public_key }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      alert('User not authenticated. Please log in.');
+      alert("User not authenticated. Please log in.");
       return;
     }
 
@@ -65,18 +67,21 @@ const Pay = ({ fname, lname, email, amount, tx_ref, public_key }) => {
       return_url: "http://localhost:3000/thanks",
       title: "Let us do this",
       description: "Paying with Confidence with Chapa",
-      logo: "https://chapa.link/asset/images/chapa_swirl.svg"
+      logo: "https://chapa.link/asset/images/chapa_swirl.svg",
     };
 
     try {
-      const response = await fetch('http://localhost:8004/payment/initialize/', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,  // Replace with your actual secret key
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "http://localhost:8004/payment/initialize/",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Replace with your actual secret key
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -90,27 +95,51 @@ const Pay = ({ fname, lname, email, amount, tx_ref, public_key }) => {
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred during payment initialization.');
+      console.error("Error:", error);
+      alert("An error occurred during payment initialization.");
     } finally {
       setIsSubmitted(true);
     }
   };
 
   return (
-    <div>
+    <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
       <form onSubmit={handleSubmit}>
-        <button type="submit" disabled={isSubmitted}>
-          {isSubmitted ? "Processing..." : "Proceed to Payment"}
-        </button>
+        <Box sx={{ width: "100%", mt: 2 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullwidth
+            disabled={isSubmitted}
+            endIcon={
+              isSubmitted ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : null
+            }
+            sx={{
+              marginBottom: 5,
+              padding: "10px 20px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              borderRadius: "10px",
+              textTransform: "none",
+              transition: "background-color 0.3s",
+              backgroundColor: isSubmitted ? "grey" : "primary.main",
+              "&:hover": {
+                backgroundColor: isSubmitted ? "grey" : "primary.dark",
+              },
+            }}
+          >
+            {isSubmitted ? "Processing..." : "Proceed to Payment"}
+          </Button>
+        </Box>
       </form>
-    </div>
+    </Box>
   );
 };
 
 export default Pay;
-
-
 
 // import { useEffect } from "react";
 
