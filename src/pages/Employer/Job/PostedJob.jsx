@@ -27,6 +27,8 @@ import { tokens } from "../../../theme";
 import ChatModal from "./fragments/ChatModal";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { useParams } from "react-router-dom";
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -82,10 +84,10 @@ const PostedJob = () => {
     if (taskId) {
       fetch(`http://localhost:8002/api/get-submission/${taskId}/`)
         .then((response) => response.json())
-        // .then((data) =>  {
-        //   setMilestones(Array(data.milestone).fill({ tasks: [] }));
-        // });
-        .then(data => setTaskDetail(data))
+        .then((data) => {
+          setTaskDetail(data);
+          setMilestones(Array(data.milestones).fill({ tasks: [] }));
+        });
     }
   }, [taskId]);
 
@@ -108,10 +110,60 @@ const PostedJob = () => {
     );
   };
 
-  const handleCompleteClick = () => {
-    if (currentMilestoneIndex < milestones.length - 1) {
-      setCurrentMilestoneIndex(currentMilestoneIndex + 1);
+  const schema = yup.object({
+    comment: yup.string().required('Comment is required'),
+  });
+
+  const isEnglish = (text) => {
+    const englishRegex = /^[A-Za-z0-9\s.,'!?()]+$/;
+    return englishRegex.test(text);
+  };
+
+  const handleCompleteClick = async (values) => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('User not authenticated. Please log in.');
+      return;
     }
+
+    // const formData = new FormData();
+    // formData.append('task', taskId);
+    // formData.append('comment', values.comment);
+
+    const payload = {
+      task: taskId,
+      comment: values.comment,
+    };
+
+    const endpoint = isEnglish(values.comment)
+      ? 'http://localhost:8003/api/analyze-sentiment-english/'
+      : 'http://localhost:8003/api/analyze-sentiment/';
+
+    try {
+      const response = await fetch(endpoint,{
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Form submitted successfully:', data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+
+    // if (currentMilestoneIndex < milestones.length - 1) {
+    //   setCurrentMilestoneIndex(currentMilestoneIndex + 1);
+    // }
   };
 
   const currentMilestone = milestones[currentMilestoneIndex];
@@ -130,34 +182,27 @@ const PostedJob = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={7}>
               <Typography variant="h4">Job Details</Typography>
-              <Typography variant="h5">Create React Project in GitHub out of a Website Template</Typography>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut
-                velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. Praesent nisi
-                sem, vehicula quis mi non, interdum iaculis mi. Sed sit amet dui fermentum, blandit felis sit amet,
-                laoreet lorem. Proin eget quam nulla. Nam pharetra gravida magna sit amet pharetra. Ut porttitor, augue
-                vel maximus blandit, orci magna tempor lorem, sed elementum leo justo et quam. Praesent eu varius ex.
-                Maecenas cursus volutpat nibh vel efficitur. Ut id erat malesuada, lacinia lectus quis, ornare diam.
-              </Typography>
+              <Typography variant="h5">{taskDetail.job_title}</Typography>
+              <Typography>{taskDetail.description}</Typography>
             </Grid>
             <Grid item xs={12} md={1}>
-              <Divider orientation="vertical" style={{ width: "1px", backgroundColor: "black", margin: "auto" }} />
+              <Divider orientation="vertical" style={{ width: '1px', backgroundColor: 'black', margin: 'auto' }} />
             </Grid>
             <Grid item xs={12} md={4}>
               <Box marginLeft={7}>
                 <Button
                   style={{
-                    display: "flex",
-                    width: "216px",
-                    padding: "16px 24px",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: "8px",
-                    borderRadius: "6px",
-                    background: "var(--WF-Base-800, #2D3648)",
+                    display: 'flex',
+                    width: '216px',
+                    padding: '16px 24px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '8px',
+                    borderRadius: '6px',
+                    background: 'var(--WF-Base-800, #2D3648)',
                   }}
                 >
-                  <Typography color={"white"}>OnGoing</Typography>
+                  <Typography color={'white'}>OnGoing</Typography>
                 </Button>
                 <Box marginTop={2}></Box>
                 <Grid container spacing={2}>
@@ -184,12 +229,12 @@ const PostedJob = () => {
               </Box>
             </Grid>
           </Grid>
-          <Divider orientation="horizontal" style={{ height: "1px", backgroundColor: "black", marginTop: 10 }} />
+          <Divider orientation="horizontal" style={{ height: '1px', backgroundColor: 'black', marginTop: 10 }} />
         </Box>
         <Box marginTop={5}>
           <Box marginTop={3}>
             <Typography variant="h6">
-              This job is done by{" "}
+              This job is done by{' '}
               <Link href="https://example.com/employee-profile" underline="hover">
                 {taskDetail.freelancer_name}
               </Link>
@@ -199,8 +244,8 @@ const PostedJob = () => {
         </Box>
         <Box marginTop={3}>
           <Typography variant="h6">Github Link</Typography>
-          <Link href="https://github.com/Kidusfikru/Senior-Project" underline="hover">
-          {taskDetail.link}
+          <Link href={taskDetail.link} underline="hover">
+            {taskDetail.link}
           </Link>
         </Box>
         <Box margin={5}>
@@ -208,32 +253,55 @@ const PostedJob = () => {
         </Box>
         <Box marginTop={3}>
           <Typography variant="h6">Uploaded File</Typography>
-          <Link href={`http://localhost:8002${taskDetail.file}`} download="mockFile.txt" underline="hover">
+          <Link href={`http://localhost:8002${taskDetail.file}`} download={taskDetail.file} underline="hover">
             Download file
           </Link>
         </Box>
         <Box margin={5}>
           <Divider />
         </Box>
-        <Box margin={2} borderRadius={4}>
-          <TextField
-            fullWidth
-            id="outlined-multiline-static"
-            label="Write your comment for this specific milestone..."
-            multiline
-            rows={5}
-            sx={{
-              backgroundColor: colors.blueAccent[800],
-              borderRadius: "8px",
-            }}
-          />
-        </Box>
-        <Box display="flex" justifyContent="right" marginTop={3}>
-          <Button variant="contained" color="primary" onClick={handleCompleteClick} disabled={completedTasks < totalTasks}>
-            Complete Milestone
-          </Button>
-        </Box>
-        <Box position="fixed" bottom={20} right={20} sx={{ background: colors.blueAccent[800], borderRadius: "80px" }}>
+        <Formik
+          initialValues={{ comment: '' }}
+          validationSchema={schema}
+          onSubmit={handleCompleteClick}
+        >
+          {({
+            handleSubmit,
+            handleChange,
+            values,
+            errors,
+            touched,
+          }) => (
+            <form onSubmit={handleSubmit}>
+              <Box margin={2} borderRadius={4}>
+                <TextField
+                  fullWidth
+                  id="outlined-multiline-static"
+                  placeholder="Write your comment for this specific milestone..."
+                  name="comment"
+                  value={values.comment}
+                  onChange={handleChange}
+                  multiline
+                  rows={5}
+                  sx={{
+                    backgroundColor: colors.blueAccent[800],
+                    borderRadius: '8px',
+                  }}
+                  error={touched.comment && Boolean(errors.comment)}
+                  helperText={touched.comment && errors.comment}
+                />
+              </Box>
+              <Box display="flex" justifyContent="right" marginTop={3}>
+                <Button variant="contained" color="primary" type="submit"
+                //  disabled={completedTasks < totalTasks}
+                 >
+                  Comment
+                </Button>
+              </Box>
+            </form>
+          )}
+        </Formik>
+        <Box position="fixed" bottom={20} right={20} sx={{ background: colors.blueAccent[800], borderRadius: '80px' }}>
           <IconButton variant="contained" color="primary" onClick={toggleChatModal}>
             <ChatBubbleIcon />
           </IconButton>

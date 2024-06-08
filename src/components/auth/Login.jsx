@@ -57,7 +57,8 @@ const Login = () => {
       } else if (response.data.role === 'employer') {
         navigate('/employer/dashboard');
       } else if (response.data.role === 'admin'){
-        navigate('/payment');
+        navigate('/admin/dashboard');
+        // navigate('/payment');
       }
 
       // resetForm();

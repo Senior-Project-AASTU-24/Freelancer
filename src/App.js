@@ -23,6 +23,7 @@ import PostedJobEmployee from "./pages/Employee/Job/PostedJob";
 import Index from "./pages/HomePage/Index";
 import Dashboard from "./pages/Employee/Dashboard/Dashboard";
 import DashboardEmployer from "./pages/Employer/Dashboard/Dashboard";
+import AdminDashboard from "./pages/Admin/AdminDashborad";
 import Payment from "./pages/Payment/Payment";
 import Thanks from "./pages/Payment/Thanks";
 import { gapi } from "gapi-script";
@@ -62,6 +63,7 @@ function App() {
         <Route path="/employee/dashboard" element={<Dashboard />} />
         <Route path="/employer/dashboard" element={<DashboardEmployer />} />
         <Route path="/employee/job-detail/apply/:jobId" element={<Apply />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/thanks" element={<Thanks />} />
         <Route path="/payment" element={<Payment />} />
 

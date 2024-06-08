@@ -93,7 +93,7 @@ const ClientDetail = () => {
                   </Typography>
                   <Typography {...smallTypographyProps}>
                     <LocationOnIcon />
-                    {freelancer.nationality}
+                    {freelancer.Nationality}
                   </Typography>
                 </Box>
               </Box>
