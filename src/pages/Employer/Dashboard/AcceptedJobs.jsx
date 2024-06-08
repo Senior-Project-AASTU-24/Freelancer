@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../../utils/Search";
 import { Box, useTheme, Button } from "@mui/material";
 import { tokens } from "../../../theme";
@@ -14,8 +14,33 @@ const AcceptedJobs = () => {
 
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(mockUpDataJobs);
-  const [data, setData] = useState(mockUpDataJobs);
+  const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState([]);
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    fetch("http://localhost:8002/api/get-submission/", {
+      method: "GET",
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        setFilteredData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, [token]);
+
 
   const handleSearch = (searchQuery) => {
     const filtered = data.filter((item) =>
@@ -33,12 +58,12 @@ const AcceptedJobs = () => {
     setCurrentPage(value);
   };
   // hey meti you can use this funtion to redirect to the specific job
-  const handleButtonClick = (id) => {
-    navigate(`/job/${id}`);
+  const handleButtonClick = (taskId) => {
+    navigate(`/employer/job-posted/${taskId}`);
   };
 
   const columns = [
-    { field: "freelancer", headerName: "Freelancer", width: 300 },
+    { field: "freelancer_name", headerName: "Freelancer", width: 300 },
     { field: "job_title", headerName: "Job", width: 300 },
     {
       field: "action",
@@ -48,7 +73,7 @@ const AcceptedJobs = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleButtonClick(params.id)}
+          onClick={() => handleButtonClick(params.row.id)}
         >
           View Job
           <VisibilityIcon {...params} sx={{ ml: 1 }} />

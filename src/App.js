@@ -57,7 +57,7 @@ function App() {
         <Route path="/employee/job-detail/:jobId" element={<JobDetail />} />
         <Route path="/employer/client-detail/:freelancerId" element={<ClientDetail />} />
         <Route path="/employer/job-post" element={<SinglePost />} />
-        <Route path="/employer/job-posted" element={<PostedJob />} />
+        <Route path="/employer/job-posted/:taskId" element={<PostedJob />} />
         <Route path="/employee/job-posted/:jobId" element={<PostedJobEmployee />} />
         <Route path="/employee/dashboard" element={<Dashboard />} />
         <Route path="/employer/dashboard" element={<DashboardEmployer />} />
