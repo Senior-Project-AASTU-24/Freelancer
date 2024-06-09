@@ -27,8 +27,10 @@ import { tokens } from "../../../theme";
 import ChatModal from "./fragments/ChatModal";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { useParams } from "react-router-dom";
-import { Formik } from 'formik';
-import * as yup from 'yup';
+import { Formik } from "formik";
+import * as yup from "yup";
+import chapaImg from "../../../assets/chapa.jpg";
+import { useNavigate } from "react-router-dom";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -63,14 +65,13 @@ const initialMilestones = [
   // Add more milestones as needed
 ];
 
-
-
 // const employee = {
 //   name: "John Doe",
 //   profilePicture: "https://randomuser",
 // };
 
 const PostedJob = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { taskId } = useParams();
@@ -111,7 +112,7 @@ const PostedJob = () => {
   };
 
   const schema = yup.object({
-    comment: yup.string().required('Comment is required'),
+    comment: yup.string().required("Comment is required"),
   });
 
   const isEnglish = (text) => {
@@ -120,10 +121,10 @@ const PostedJob = () => {
   };
 
   const handleCompleteClick = async (values) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      alert('User not authenticated. Please log in.');
+      alert("User not authenticated. Please log in.");
       return;
     }
 
@@ -137,28 +138,30 @@ const PostedJob = () => {
     };
 
     const endpoint = isEnglish(values.comment)
-      ? 'http://localhost:8003/api/analyze-sentiment-english/'
-      : 'http://localhost:8003/api/analyze-sentiment/';
+      ? "http://localhost:8003/api/analyze-sentiment-english/"
+      : "http://localhost:8003/api/analyze-sentiment/";
 
     try {
-      const response = await fetch(endpoint,{
-        method: 'POST',
+      const response = await fetch(endpoint, {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${errorText}`
+        );
       }
 
       const data = await response.json();
-      console.log('Form submitted successfully:', data);
+      console.log("Form submitted successfully:", data);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
     }
 
     // if (currentMilestoneIndex < milestones.length - 1) {
@@ -167,11 +170,17 @@ const PostedJob = () => {
   };
 
   const currentMilestone = milestones[currentMilestoneIndex];
-  const completedTasks = currentMilestone.tasks.filter((task) => task.checked).length;
+  const completedTasks = currentMilestone.tasks.filter(
+    (task) => task.checked
+  ).length;
   const totalTasks = currentMilestone.tasks.length;
 
   const toggleChatModal = () => {
     setIsChatModalOpen(!isChatModalOpen);
+  };
+
+  const handleChapaClick = () => {
+    navigate("/payment");
   };
 
   return (
@@ -186,61 +195,75 @@ const PostedJob = () => {
               <Typography>{taskDetail.description}</Typography>
             </Grid>
             <Grid item xs={12} md={1}>
-              <Divider orientation="vertical" style={{ width: '1px', backgroundColor: 'black', margin: 'auto' }} />
+              <Divider
+                orientation="vertical"
+                style={{
+                  width: "1px",
+                  backgroundColor: "black",
+                  margin: "auto",
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
               <Box marginLeft={7}>
                 <Button
                   style={{
-                    display: 'flex',
-                    width: '216px',
-                    padding: '16px 24px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '8px',
-                    borderRadius: '6px',
-                    background: 'var(--WF-Base-800, #2D3648)',
+                    display: "flex",
+                    width: "216px",
+                    padding: "16px 24px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "8px",
+                    borderRadius: "6px",
+                    background: "var(--WF-Base-800, #2D3648)",
                   }}
                 >
-                  <Typography color={'white'}>OnGoing</Typography>
+                  <Typography color={"white"}>OnGoing</Typography>
                 </Button>
                 <Box marginTop={2}></Box>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={5}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="72" height="85" viewBox="0 0 72 85" fill="none">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M18.5655 74.7196C17.7847 80.1415 16.9463 84.2142 16.9463 84.2142L33.6573 84.2142L36.8982 61.7107H52.3375C63.2065 61.7107 72.0001 53.1311 72.0001 42.5477C72.0001 36.4543 69.1032 31.0392 64.583 27.5269L19.3751 30.7653"
-                        fill="#5EA7FF"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M21.399 0H10.4692L0 74.4925H18.6212L22.4909 46.9577H40.4224C53.3811 46.9577 63.9038 36.4478 63.9038 23.4831V23.4788C63.9038 10.5033 53.3909 0 40.4224 0H21.399Z"
-                        fill="#5B68C0"
-                      />
-                    </svg>
+                    <img
+                      src={chapaImg}
+                      alt="Logo"
+                      onClick={handleChapaClick}
+                      style={{
+                        borderRadius: "50%",
+                        maxWidth: "100%",
+                        height: "auto",
+                        objectFit: "contain",
+                      }}
+                    />
                   </Grid>
-                  <Grid item xs={12} md={7}>
+                  {/* <Grid item xs={12} md={7}>
                     <Typography variant="h4">$ 150</Typography>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Box>
             </Grid>
           </Grid>
-          <Divider orientation="horizontal" style={{ height: '1px', backgroundColor: 'black', marginTop: 10 }} />
+          <Divider
+            orientation="horizontal"
+            style={{ height: "1px", backgroundColor: "black", marginTop: 10 }}
+          />
         </Box>
         <Box marginTop={5}>
           <Box marginTop={3}>
             <Typography variant="h6">
-              This job is done by{' '}
-              <Link href="https://example.com/employee-profile" underline="hover">
+              This job is done by{" "}
+              <Link
+                href="https://example.com/employee-profile"
+                underline="hover"
+              >
                 {taskDetail.freelancer_name}
               </Link>
             </Typography>
           </Box>
-          <Milestones milestones={milestones} currentMilestoneIndex={currentMilestoneIndex} handleCheckboxChange={handleCheckboxChange} />
+          <Milestones
+            milestones={milestones}
+            currentMilestoneIndex={currentMilestoneIndex}
+            handleCheckboxChange={handleCheckboxChange}
+          />
         </Box>
         <Box marginTop={3}>
           <Typography variant="h6">Github Link</Typography>
@@ -253,7 +276,11 @@ const PostedJob = () => {
         </Box>
         <Box marginTop={3}>
           <Typography variant="h6">Uploaded File</Typography>
-          <Link href={`http://localhost:8002${taskDetail.file}`} download={taskDetail.file} underline="hover">
+          <Link
+            href={`http://localhost:8002${taskDetail.file}`}
+            download={taskDetail.file}
+            underline="hover"
+          >
             Download file
           </Link>
         </Box>
@@ -261,17 +288,11 @@ const PostedJob = () => {
           <Divider />
         </Box>
         <Formik
-          initialValues={{ comment: '' }}
+          initialValues={{ comment: "" }}
           validationSchema={schema}
           onSubmit={handleCompleteClick}
         >
-          {({
-            handleSubmit,
-            handleChange,
-            values,
-            errors,
-            touched,
-          }) => (
+          {({ handleSubmit, handleChange, values, errors, touched }) => (
             <form onSubmit={handleSubmit}>
               <Box margin={2} borderRadius={4}>
                 <TextField
@@ -285,24 +306,36 @@ const PostedJob = () => {
                   rows={5}
                   sx={{
                     backgroundColor: colors.blueAccent[800],
-                    borderRadius: '8px',
+                    borderRadius: "8px",
                   }}
                   error={touched.comment && Boolean(errors.comment)}
                   helperText={touched.comment && errors.comment}
                 />
               </Box>
               <Box display="flex" justifyContent="right" marginTop={3}>
-                <Button variant="contained" color="primary" type="submit"
-                //  disabled={completedTasks < totalTasks}
-                 >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  //  disabled={completedTasks < totalTasks}
+                >
                   Comment
                 </Button>
               </Box>
             </form>
           )}
         </Formik>
-        <Box position="fixed" bottom={20} right={20} sx={{ background: colors.blueAccent[800], borderRadius: '80px' }}>
-          <IconButton variant="contained" color="primary" onClick={toggleChatModal}>
+        <Box
+          position="fixed"
+          bottom={20}
+          right={20}
+          sx={{ background: colors.blueAccent[800], borderRadius: "80px" }}
+        >
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={toggleChatModal}
+          >
             <ChatBubbleIcon />
           </IconButton>
         </Box>

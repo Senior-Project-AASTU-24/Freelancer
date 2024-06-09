@@ -149,9 +149,9 @@ const PostedJobEmployee = () => {
     setIsChatModalOpen(!isChatModalOpen);
   };
 
-  const handleChapaClick = () => {
-    navigate("/payment");
-  };
+  // const handleChapaClick = () => {
+  //   navigate("/payment");
+  // };
 
   return (
     <div>
@@ -248,7 +248,7 @@ const PostedJobEmployee = () => {
                     <img
                       src={chapaImg}
                       alt="Logo"
-                      onClick={handleChapaClick}
+                      // onClick={handleChapaClick}
                       style={{
                         borderRadius: "50%",
                         maxWidth: "100%",
