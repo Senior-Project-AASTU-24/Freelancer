@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { Box, Typography, useTheme, IconButton } from "@mui/material";
+import { Box, Typography, useTheme, IconButton, Rating } from "@mui/material";
 import { tokens } from "../../theme";
 import { Divider, Chip } from "@mui/material";
 import EmployersLogo from "../../assets/EmployersLogo.png";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
-const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) => {
+const StatBox = ({
+  jobTitle,
+  employmentType,
+  salary,
+  employerName,
+  onClick,
+  rating,
+}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [bookmarked, setBookmarked] = useState(false);
@@ -90,6 +97,18 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) =>
         </Box>
       </Box>
 
+      {rating && (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          alignSelf="stretch"
+          gap="12px"
+        >
+          <Rating value={rating} readOnly precision={0.5} />
+        </Box>
+      )}
+
       <Box
         display="flex"
         justifyContent="space-between"
@@ -122,10 +141,12 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) =>
             {employerName}
           </Typography>
         </Box>
-        <IconButton onClick={(event) => {
-          event.stopPropagation(); // Prevent triggering the onClick for the box
-          handleBookmarkClick();
-        }}>
+        <IconButton
+          onClick={(event) => {
+            event.stopPropagation(); // Prevent triggering the onClick for the box
+            handleBookmarkClick();
+          }}
+        >
           {bookmarked ? (
             <BookmarkIcon sx={{ color: "gold" }} />
           ) : (

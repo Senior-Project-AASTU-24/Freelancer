@@ -15,8 +15,9 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
+  Rating,
 } from "@mui/material";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import {
   mediumTypographyProps,
   salaryTypographyProps,
@@ -34,17 +35,15 @@ const ClientDetail = () => {
   const [buttonText, setButtonText] = useState("Hire Now");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const token = localStorage.getItem('token');
-  
-
-  
-
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     fetch(`http://localhost:8002/api/freelancers/${freelancerId}/`)
       .then((response) => response.json())
       .then((data) => setFreelancer(data))
-      .catch((error) => console.error("Error fetching freelancer data:", error));
+      .catch((error) =>
+        console.error("Error fetching freelancer data:", error)
+      );
   }, [freelancerId]);
 
   if (!freelancer) {
@@ -56,11 +55,10 @@ const ClientDetail = () => {
       freelancer_id: freelancerId,
     };
     fetch("http://localhost:8001/api/make-request/", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-       
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     })
@@ -147,7 +145,9 @@ const ClientDetail = () => {
                     <BookmarkIcon />
                   </IconButton>
                 </Box>
-                <Button variant="contained" onClick={handleHireClick}>{buttonText}</Button>
+                <Button variant="contained" onClick={handleHireClick}>
+                  {buttonText}
+                </Button>
               </Box>
             </Grid>
           </Grid>
@@ -166,7 +166,7 @@ const ClientDetail = () => {
                   {freelancer.experience} years
                 </Typography>
                 <Divider sx={{ m: "10px" }} />
-                <Typography {...mediumTypographyProps}>Skills</Typography>
+                <Typography {...mediumTypographyProps}>Rating</Typography>
                 {/* Assuming freelancer.skills is an array of skills */}
                 {/* <Stack direction="row" spacing={1} sx={{ marginTop: 3 }}>
                   {freelancer.skills?.map((skill, index) => (
@@ -177,6 +177,8 @@ const ClientDetail = () => {
                     />
                   ))}
                 </Stack> */}
+                <Rating value={freelancer?.rating} readOnly precision={0.5} />{" "}
+                {/* not sure if you have a value called rating... */}
               </Box>
             </Grid>
             <Grid item xs={1} md={1}>

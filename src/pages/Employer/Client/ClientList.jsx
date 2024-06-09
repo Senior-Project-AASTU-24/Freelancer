@@ -7,7 +7,7 @@ import Footer from "../../../components/Layouts/Footer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Topbar from "../../../components/Layouts/Topbar";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const ClientList = () => {
   const theme = useTheme();
@@ -25,7 +25,9 @@ const ClientList = () => {
         setFreelancers(data);
         setFilteredData(data);
       })
-      .catch((error) => console.error("Error fetching freelancers data:", error));
+      .catch((error) =>
+        console.error("Error fetching freelancers data:", error)
+      );
   }, []);
 
   const handleSearch = (filteredData) => {
@@ -67,6 +69,7 @@ const ClientList = () => {
                   salary={freelancer.salary_range}
                   employerName={freelancer.name}
                   location={freelancer.location}
+                  rating={freelancer.rating} // not sure if you have a value called rating...
                   onClick={() => handleFreelancerClick(freelancer.id)}
                 />
               </Box>
