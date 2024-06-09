@@ -31,8 +31,14 @@ import SchoolIcon from "@mui/icons-material/School";
 const ClientDetail = () => {
   const { freelancerId } = useParams();
   const [freelancer, setFreelancer] = useState(null);
+  const [buttonText, setButtonText] = useState("Hire Now");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const token = localStorage.getItem('token');
+  
+
+  
+
 
   useEffect(() => {
     fetch(`http://localhost:8002/api/freelancers/${freelancerId}/`)
@@ -44,6 +50,29 @@ const ClientDetail = () => {
   if (!freelancer) {
     return <div>Loading...</div>;
   }
+
+  const handleHireClick = () => {
+    const payload = {
+      freelancer_id: freelancerId,
+    };
+    fetch("http://localhost:8001/api/make-request/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+       
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setButtonText("Request Sent");
+        } else {
+          console.error("Error sending hire request");
+        }
+      })
+      .catch((error) => console.error("Error sending hire request:", error));
+  };
 
   const mediumTypographyProps = {
     variant: "h6",
@@ -118,7 +147,7 @@ const ClientDetail = () => {
                     <BookmarkIcon />
                   </IconButton>
                 </Box>
-                <Button variant="contained">Hire Now</Button>
+                <Button variant="contained" onClick={handleHireClick}>{buttonText}</Button>
               </Box>
             </Grid>
           </Grid>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Topbar from "../../../components/Layouts/Topbar";
 import Search from "../../../utils/Search";
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -76,6 +76,32 @@ const columns = [
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [userInfo, setUserInfo] = useState(null);
+  
+    useEffect(() => {
+      const token = localStorage.getItem('token'); // Get the token from localStorage
+  
+      if (token) {
+        fetch('http://localhost:8000/api/token/validate/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Add the token to the Authorization header
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to validate token');
+          }
+          return response.json();
+        })
+        .then(data => setUserInfo(data))
+        .catch(error => console.error('Error fetching user info:', error));
+      }
+    }, []);
+    if (!userInfo) {
+      return <div>No user information available</div>;
+    }
   return (
     <MenuItem
       active={selected === title}
@@ -98,7 +124,9 @@ const Overview = () => {
     <div>
       {" "}
       <Box marginTop={5} marginRight={3}>
-        <Typography {...mediumTypographyProps}>Hello, User</Typography>
+        <Typography {...mediumTypographyProps}>Hello, 
+        {/* {userInfo.username} */}
+        </Typography>
         <Typography {...smallTypographyProps}>
           Here is your activities & career opportunities
         </Typography>

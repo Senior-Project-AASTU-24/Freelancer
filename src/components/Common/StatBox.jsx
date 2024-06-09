@@ -6,7 +6,7 @@ import EmployersLogo from "../../assets/EmployersLogo.png";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
-const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
+const StatBox = ({ jobTitle, employmentType, salary, employerName, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [bookmarked, setBookmarked] = useState(false);
@@ -32,8 +32,10 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
         transition: "transform 0.3s ease-in-out",
         "&:hover": {
           transform: "scale(1.05)",
+          cursor: "pointer", // Add a pointer cursor on hover
         },
       }}
+      onClick={onClick} // Call the onClick function when the box is clicked
     >
       <Box
         display="flex"
@@ -88,7 +90,6 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
         </Box>
       </Box>
 
-      {/* New Box for EmployersLogo, Typography, and BookmarkIcon */}
       <Box
         display="flex"
         justifyContent="space-between"
@@ -121,7 +122,10 @@ const StatBox = ({ jobTitle, employmentType, salary, employerName }) => {
             {employerName}
           </Typography>
         </Box>
-        <IconButton onClick={handleBookmarkClick}>
+        <IconButton onClick={(event) => {
+          event.stopPropagation(); // Prevent triggering the onClick for the box
+          handleBookmarkClick();
+        }}>
           {bookmarked ? (
             <BookmarkIcon sx={{ color: "gold" }} />
           ) : (
