@@ -118,7 +118,12 @@ const Payment = () => {
   const tx_ref = generateTxRef();
   const public_key = "CHAPUBK_TEST-5GtlNm51HozWFSZQYPGoAIsuaiZhs15i";
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <br />
       <div className="bg-green-200 h-screen flex justify-center items-center relative">
@@ -195,7 +200,7 @@ const Payment = () => {
       </div>
 
       <Footer />
-    </div>
+    </Box>
   );
 };
 

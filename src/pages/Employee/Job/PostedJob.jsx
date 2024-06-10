@@ -42,16 +42,15 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-
 const CommentBox = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   marginBottom: theme.spacing(2),
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.shape.borderRadius,
   boxShadow: theme.shadows[3],
-  transition: 'transform 0.2s ease-in-out',
-  '&:hover': {
-    transform: 'scale(1.02)',
+  transition: "transform 0.2s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.02)",
   },
 }));
 
@@ -68,7 +67,7 @@ const PostedJobEmployee = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState("");
   const [comments, setComments] = useState([]);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (jobId) {
@@ -77,30 +76,29 @@ const PostedJobEmployee = () => {
         .then((response) => response.json())
         .then((data) => {
           const milestonesWithTasks = Array(data.milestone).fill({
-           checked: false
+            checked: false,
           });
           setMilestones(milestonesWithTasks);
         });
     }
   }, [jobId]);
 
-  
   useEffect(() => {
-    fetch('http://localhost:8003/api/sentiments/user/', {
+    fetch("http://localhost:8003/api/sentiments/user/", {
       method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        setComments(data)
+        setComments(data);
       })
       .catch((error) => console.error("Error fetching sentiment data:", error));
   }, []);
 
   const handleCheckboxChange = (index) => {
-    setMilestones(prevMilestones =>
+    setMilestones((prevMilestones) =>
       prevMilestones.map((milestone, i) =>
         i === index ? { ...milestone, checked: !milestone.checked } : milestone
       )
@@ -114,27 +112,26 @@ const PostedJobEmployee = () => {
       alert("User not authenticated. Please log in.");
       return;
     }
-      // Submit the task
-      const formData = new FormData();
-      formData.append("job_applied", jobId);
-      formData.append("submission_date", new Date().toISOString());
-      formData.append("link", githubLink);
-      if (selectedFile) {
-        formData.append("file", selectedFile);
-      }
+    // Submit the task
+    const formData = new FormData();
+    formData.append("job_applied", jobId);
+    formData.append("submission_date", new Date().toISOString());
+    formData.append("link", githubLink);
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+    }
 
-      fetch("http://localhost:8002/api/submit-task/", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`, // Replace with your actual secret key
-        },
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Task submitted:", data);
-        });
-    
+    fetch("http://localhost:8002/api/submit-task/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`, // Replace with your actual secret key
+      },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Task submitted:", data);
+      });
   };
 
   const handleFileChange = (event) => {
@@ -150,7 +147,9 @@ const PostedJobEmployee = () => {
     }
   };
 
-  const completedTasks = milestones.filter(milestone => milestone.checked).length;
+  const completedTasks = milestones.filter(
+    (milestone) => milestone.checked
+  ).length;
   const totalTasks = milestones.length;
 
   const toggleChatModal = () => {
@@ -162,7 +161,12 @@ const PostedJobEmployee = () => {
   // };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box maxWidth="1320px" mx="auto">
@@ -229,11 +233,12 @@ const PostedJobEmployee = () => {
               </Box>
             </Grid>
           </Grid>
-          <Divider orientation="horizontal" style={{ height: '1px', backgroundColor: 'black', marginTop: 10 }} />
+          <Divider
+            orientation="horizontal"
+            style={{ height: "1px", backgroundColor: "black", marginTop: 10 }}
+          />
         </Box>
-        <Box marginTop={5}>
-          {/* Other component code */}
-        </Box>
+        <Box marginTop={5}>{/* Other component code */}</Box>
         <Box marginTop={3}>
           <Typography variant="h6">Github Link</Typography>
           <FormControl variant="standard" fullWidth>
@@ -281,9 +286,11 @@ const PostedJobEmployee = () => {
           {comments.length > 0 ? (
             comments.map((comment, index) => (
               <CommentBox key={index}>
-                <Grid container spacing={2} alignItems="center"> 
+                <Grid container spacing={2} alignItems="center">
                   <Grid item xs={9}>
-                    <Typography variant="body2">Feedback: {comment.comment}</Typography>
+                    <Typography variant="body2">
+                      Feedback: {comment.comment}
+                    </Typography>
                   </Grid>
                   <Grid item xs={3}>
                     <Typography variant="caption">
@@ -297,7 +304,7 @@ const PostedJobEmployee = () => {
             <Typography variant="body2">No comments found.</Typography>
           )}
         </Box>
-        
+
         <Box
           position="fixed"
           bottom={20}
@@ -315,7 +322,7 @@ const PostedJobEmployee = () => {
       </Box>
       <ChatModal open={isChatModalOpen} onClose={toggleChatModal} />
       <Footer />
-    </div>
+    </Box>
   );
 };
 

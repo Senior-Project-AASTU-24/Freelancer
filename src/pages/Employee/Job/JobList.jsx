@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import Search from "../../../utils/Search";
 import StatBox from "../../../components/Common/StatBox";
 import { Grid, Box, useTheme } from "@mui/material";
@@ -18,17 +18,16 @@ const JobList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8001/api/job-list/')
+    fetch("http://localhost:8001/api/job-list/")
       .then((response) => response.json())
       .then((data) => {
         setJobs(data);
         setFilteredData(data);
       })
-      .catch((error) => console.error("Error fetching freelancers data:", error));
+      .catch((error) =>
+        console.error("Error fetching freelancers data:", error)
+      );
   }, []);
-
-  
-
 
   const handleSearch = (filteredData) => {
     setFilteredData(filteredData);
@@ -48,7 +47,12 @@ const JobList = () => {
   };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -89,7 +93,7 @@ const JobList = () => {
         </Stack>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

@@ -6,7 +6,12 @@ import Footer from "../../components/Layouts/Footer";
 
 const Thanks = () => {
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box
         component={motion.div}
@@ -72,7 +77,7 @@ const Thanks = () => {
         </Box>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

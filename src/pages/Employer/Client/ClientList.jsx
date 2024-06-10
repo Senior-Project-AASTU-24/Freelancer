@@ -48,7 +48,12 @@ const ClientList = () => {
   };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -70,7 +75,9 @@ const ClientList = () => {
                   employerName={freelancer.name}
                   location={freelancer.location}
                   rating={freelancer.rating} // not sure if you have a value called rating...
-                  onClick={() => handleFreelancerClick(freelancer.id, freelancer.user_id)}
+                  onClick={() =>
+                    handleFreelancerClick(freelancer.id, freelancer.user_id)
+                  }
                 />
               </Box>
             </Grid>
@@ -91,7 +98,7 @@ const ClientList = () => {
         </Stack>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

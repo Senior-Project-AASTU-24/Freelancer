@@ -184,7 +184,12 @@ const PostedJob = () => {
   };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box maxWidth="1320px" mx="auto">
@@ -215,7 +220,7 @@ const PostedJob = () => {
                     alignItems: "center",
                     gap: "8px",
                     borderRadius: "6px",
-                    background: "var(--WF-Base-800, #2D3648)"  
+                    background: "var(--WF-Base-800, #2D3648)",
                   }}
                   onClick={handleChapaClick}
                 >
@@ -343,7 +348,7 @@ const PostedJob = () => {
       </Box>
       <ChatModal open={isChatModalOpen} onClose={toggleChatModal} />
       <Footer />
-    </div>
+    </Box>
   );
 };
 

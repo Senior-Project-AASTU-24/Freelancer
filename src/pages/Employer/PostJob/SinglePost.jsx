@@ -17,7 +17,7 @@ const SinglePost = () => {
     max_budget: "",
     education: "",
     milestones: "",
-    job_level: ""
+    job_level: "",
   });
 
   // const handleSubmit = async () => {
@@ -45,17 +45,34 @@ const SinglePost = () => {
   // };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box sx={{ m: 10 }}>
         {status === "initial" && (
-          <PostTitle setStatus={setStatus} postData={postData} setPostData={setPostData} />
+          <PostTitle
+            setStatus={setStatus}
+            postData={postData}
+            setPostData={setPostData}
+          />
         )}
         {status === "jobType" && (
-          <JobType setStatus={setStatus} postData={postData} setPostData={setPostData} />
+          <JobType
+            setStatus={setStatus}
+            postData={postData}
+            setPostData={setPostData}
+          />
         )}
         {status === "education" && (
-          <Education setStatus={setStatus} postData={postData} setPostData={setPostData} />
+          <Education
+            setStatus={setStatus}
+            postData={postData}
+            setPostData={setPostData}
+          />
         )}
         {status === "milestones" && (
           <MileStones
@@ -67,7 +84,7 @@ const SinglePost = () => {
         )}
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

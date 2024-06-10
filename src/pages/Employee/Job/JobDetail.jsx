@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import Footer from "../../../components/Layouts/Footer";
 import {
   Box,
@@ -17,7 +17,7 @@ import {
 } from "../../../Constants";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import Topbar from "../../../components/Layouts/Topbar";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const JobDetail = () => {
   const { jobId } = useParams();
@@ -27,21 +27,26 @@ const JobDetail = () => {
   useEffect(() => {
     // Fetch job details from the backend
     fetch(`http://localhost:8001/api/jobs/${jobId}/`)
-      .then(response => response.json())
-      .then(data => setJobDetail(data))
-      .catch(error => console.error('Error fetching job details:', error));
+      .then((response) => response.json())
+      .then((data) => setJobDetail(data))
+      .catch((error) => console.error("Error fetching job details:", error));
   }, [jobId]);
 
   if (!jobDetail) {
     return <div>Loading...</div>;
   }
-  
+
   const handleApply = () => {
     navigate(`/employee/job-detail/apply/${jobId}`);
   };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box maxWidth="1320px" mx="auto">
@@ -56,7 +61,7 @@ const JobDetail = () => {
                 mb={4}
               >
                 <img
-                  src={'/path/to/your/employers/logo.png'} // replace with actual logo path
+                  src={"/path/to/your/employers/logo.png"} // replace with actual logo path
                   alt="EmployersLogo"
                   style={{
                     padding: "12px",
@@ -106,11 +111,11 @@ const JobDetail = () => {
                 <Typography variant="h6" fontWeight="bold">
                   Job Description
                 </Typography>
-                <Typography variant="body1">
-                  {jobDetail.description}
-                </Typography>
+                <Typography variant="body1">{jobDetail.description}</Typography>
                 <Divider sx={{ m: "10px" }} />
-                <Typography variant="h6" fontWeight="bold">Requirements</Typography>
+                <Typography variant="h6" fontWeight="bold">
+                  Requirements
+                </Typography>
                 <Typography variant="body1">
                   {/* Add specific requirements here if available */}
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
@@ -137,7 +142,9 @@ const JobDetail = () => {
                 p={2}
               >
                 <Box>
-                  <Typography variant="h6" fontWeight="bold">Payment</Typography>
+                  <Typography variant="h6" fontWeight="bold">
+                    Payment
+                  </Typography>
                   <Typography variant="h5" fontWeight="bold">
                     ${jobDetail.min_budget} - ${jobDetail.max_budget}
                   </Typography>
@@ -180,10 +187,10 @@ const JobDetail = () => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <Typography variant="h6" fontWeight="bold">Job Location</Typography>
-                  <Typography variant="body1">
-                    {jobDetail.location}
+                  <Typography variant="h6" fontWeight="bold">
+                    Job Location
                   </Typography>
+                  <Typography variant="body1">{jobDetail.location}</Typography>
                 </Box>
               </Box>
 
@@ -200,7 +207,9 @@ const JobDetail = () => {
                 mt={4}
               >
                 <Box mb={2}>
-                  <Typography variant="h6" fontWeight="bold">Job Overview</Typography>
+                  <Typography variant="h6" fontWeight="bold">
+                    Job Overview
+                  </Typography>
                 </Box>
                 <Box display="flex" alignItems="center" gap={4}>
                   <Grid container spacing={2}>
@@ -244,7 +253,7 @@ const JobDetail = () => {
                         </svg>
                         <Typography variant="body2">Job Posted:</Typography>
                         <Typography variant="body1">
-                         {jobDetail.posted_at}
+                          {jobDetail.posted_at}
                         </Typography>
                       </Box>
                     </Grid>
@@ -286,9 +295,7 @@ const JobDetail = () => {
                           />
                         </svg>
                         <Typography variant="body2">Job Expire in</Typography>
-                        <Typography variant="body1">
-                          2024-09-10
-                        </Typography>
+                        <Typography variant="body1">2024-09-10</Typography>
                       </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
@@ -327,7 +334,7 @@ const JobDetail = () => {
         </Box>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

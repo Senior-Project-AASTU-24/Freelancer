@@ -41,26 +41,30 @@ const ClientDetail = () => {
   useEffect(() => {
     const fetchFreelancerData = async () => {
       try {
-        const freelancerResponse = await fetch(`http://localhost:8002/api/freelancers/${freelancerId}/`);
+        const freelancerResponse = await fetch(
+          `http://localhost:8002/api/freelancers/${freelancerId}/`
+        );
         if (!freelancerResponse.ok) {
-          throw new Error('Failed to fetch freelancer data');
+          throw new Error("Failed to fetch freelancer data");
         }
         const freelancerData = await freelancerResponse.json();
         setFreelancer(freelancerData);
 
-        const ratingResponse = await fetch(`http://localhost:8002/api/freelancer-rating/${userId}/`);
+        const ratingResponse = await fetch(
+          `http://localhost:8002/api/freelancer-rating/${userId}/`
+        );
         if (!ratingResponse.ok) {
-          throw new Error('Failed to fetch freelancer rating');
+          throw new Error("Failed to fetch freelancer rating");
         }
         const ratingData = await ratingResponse.json();
         setRating(ratingData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchFreelancerData();
-  }, [freelancerId,userId]);
+  }, [freelancerId, userId]);
 
   if (!freelancer || !rating) {
     return <div>Loading...</div>;
@@ -107,7 +111,12 @@ const ClientDetail = () => {
   };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box maxWidth="1320px" mx="auto">
@@ -185,7 +194,7 @@ const ClientDetail = () => {
                 <Divider sx={{ m: "10px" }} />
                 <Typography {...mediumTypographyProps}>Rating</Typography>
                 <Typography {...smallTypographyProps}>
-                {rating.average_rate} / 10
+                  {rating.average_rate} / 10
                 </Typography>
                 <Rating value={scaledRating} readOnly precision={0.5} />{" "}
                 {/* not sure if you have a value called rating... */}
@@ -272,7 +281,7 @@ const ClientDetail = () => {
         </Box>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

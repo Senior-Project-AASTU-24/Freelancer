@@ -45,7 +45,12 @@ const JobList = () => {
   };
 
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -85,7 +90,7 @@ const JobList = () => {
         </Stack>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

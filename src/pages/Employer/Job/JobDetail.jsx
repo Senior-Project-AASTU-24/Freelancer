@@ -19,7 +19,12 @@ import Topbar from "../../../components/Layouts/Topbar";
 
 const JobDetail = () => {
   return (
-    <div>
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100vh"
+      style={{ overflowX: "hidden" }}
+    >
       <Topbar />
       <Box m="50px">
         <Box maxWidth="1320px" mx="auto">
@@ -384,7 +389,7 @@ const JobDetail = () => {
         </Box>
       </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 
