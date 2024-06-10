@@ -46,6 +46,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import HireRequests from "./HireRequests";
 import miko from "../../../assets/miko.jpg";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ConfirmationModal from "../../../components/Common/ConfirmationModal";
 
 const mockData = [
   { id: 1, name: "John Doe", position: "Software Engineer", status: "Applied" },
@@ -76,15 +77,7 @@ const columns = [
   { field: "status", headerName: "Status", width: 150 },
 ];
 
-// ...
-
-<DataGrid
-  rows={mockData}
-  columns={columns}
-  components={{ Toolbar: GridToolbar }}
-/>;
-
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -93,11 +86,13 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={() => {
+        setSelected(title);
+        if (onClick) onClick();
+      }}
       icon={icon}
     >
       <Typography>{title}</Typography>
-      {/* <Link to={to} /> */}
     </MenuItem>
   );
 };
@@ -108,6 +103,8 @@ const Dashboard = () => {
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Overview");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -115,7 +112,48 @@ const Dashboard = () => {
     setIsCollapsed(isSmallScreen);
   }, [isSmallScreen]);
 
-  console.log(selected);
+  const handleLogoutClicked = () => {
+    setIsModalOpen(true);
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("User not authenticated. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/logout/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      } else {
+        console.error("Failed to logout:", response.statusText);
+        alert("Failed to logout. Please try again.");
+      }
+    } catch (error) {
+      console.error("An error occurred during logout:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setAnchorEl(null);
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Topbar />
@@ -202,13 +240,7 @@ const Dashboard = () => {
                       >
                         User
                       </Typography>
-                      <Rating
-                        name="simple-controlled"
-                        value={2}
-                        // onChange={(event, newValue) => {
-                        //   setValue(newValue);
-                        // }}
-                      />
+                      <Rating name="simple-controlled" value={2} />
                     </Grid>
                   </Grid>
                 )}
@@ -220,7 +252,6 @@ const Dashboard = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
-
                   <Item
                     title="Applied Jobs"
                     to="/"
@@ -235,13 +266,6 @@ const Dashboard = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
-                  {/* <Item
-                    title="Favorite Jobs"
-                    to="/"
-                    icon={<FavoriteIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                  /> */}
                   <Item
                     title="Hire Requests"
                     to="/"
@@ -257,14 +281,14 @@ const Dashboard = () => {
                     setSelected={setSelected}
                   />
                   <Divider />
-
                   <Item
                     title="Logout"
                     icon={<LogoutIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    onClick={handleLogoutClicked}
                     style={{ color: colors.grey[100] }}
-                  ></Item>
+                  />
                 </Box>
               </Menu>
             </ProSidebar>
@@ -279,6 +303,13 @@ const Dashboard = () => {
           {selected === "Hire Requests" && <HireRequests />}
         </Grid>
       </Grid>
+      <ConfirmationModal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleLogout}
+        title="Confirm Logout"
+        content="Are you sure you want to logout?"
+      />
     </>
   );
 };
