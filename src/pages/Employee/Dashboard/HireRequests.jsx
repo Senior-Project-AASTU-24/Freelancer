@@ -1,13 +1,38 @@
 import React, { useState } from "react";
 import Search from "../../../utils/Search";
 import StatBox from "../../../components/Common/StatBox";
-import { Grid, Box, useTheme } from "@mui/material";
+import { Grid, Box, useTheme, Button } from "@mui/material";
 import { tokens } from "../../../theme";
 import { mockUpDataJobs } from "../../../data/mockData";
 import Footer from "../../../components/Layouts/Footer";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { DataGrid } from "@mui/x-data-grid";
+
+const mockUpData = [
+  {
+    id: 1,
+    job: "Software Engineer",
+    dateApplied: "2022-01-01",
+    status: "Applied",
+    action: "Accept",
+  },
+  {
+    id: 2,
+    job: "Web Developer",
+    dateApplied: "2022-01-02",
+    status: "In Progress",
+    action: "Accept",
+  },
+  {
+    id: 3,
+    job: "Data Analyst",
+    dateApplied: "2022-01-03",
+    status: "Rejected",
+    action: "Accept",
+  },
+  // Add more mock data here
+];
 
 
 

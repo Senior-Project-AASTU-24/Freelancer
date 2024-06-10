@@ -303,29 +303,6 @@ const Signup = () => {
                     variant="contained"
                     style={{
                       height: "45px",
-                      backgroundColor: "#3B5998",
-                      color: "white",
-                    }}
-                  >
-                    {
-                      <Typography
-                        variant="button"
-                        display="block"
-                        gutterBottom
-                        fontWeight="bold"
-                      >
-                       <Link href="/facebook" color="#FFFFFF">
-                      {"Facebook"}
-                    </Link>
-                      </Typography>
-                    }
-                  </Button>
-                </Box>
-                <Box display="grid" gap="10px" mt="20px">
-                  <Button
-                    variant="contained"
-                    style={{
-                      height: "45px",
                       backgroundColor: "#DB4437",
                       color: "white",
                     }}

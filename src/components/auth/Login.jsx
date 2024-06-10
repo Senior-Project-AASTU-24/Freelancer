@@ -58,7 +58,7 @@ const Login = () => {
         navigate('/employer/dashboard');
       } else if (response.data.role === 'admin'){
         navigate('/admin/dashboard');
-        // navigate('/payment');
+        
       }
 
       // resetForm();
@@ -187,29 +187,6 @@ const Login = () => {
                       or continue with
                     </Typography>{" "}
                   </Divider>
-                </Box>
-                <Box display="grid" gap="10px" mt="20px">
-                  <Button
-                    variant="contained"
-                    style={{
-                      height: "45px",
-                      backgroundColor: "#3B5998",
-                      color: "white",
-                    }}
-                  >
-                    {
-                      <Typography
-                        variant="button"
-                        display="block"
-                        gutterBottom
-                        fontWeight="bold"
-                      >
-                      <Link href="/google" color="#FFFFFF">
-                      {"Facebook"}
-                    </Link>
-                      </Typography>
-                    }
-                  </Button>
                 </Box>
                 <Box display="grid" gap="10px" mt="20px">
                   <Button

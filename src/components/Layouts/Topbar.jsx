@@ -40,15 +40,30 @@ const Topbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [language, setLanguage] = useState("en");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState('');
+  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+
+    const role = localStorage.getItem('role');
+    setUserRole(role);
+  }, []);
+
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Find FreeLancer", href: "/employer/client-list" },
-    { label: "Find Job", href: "/employee/job-list" },
-    { label: "Post Job", href: "/employer/job-post" },
-    { label: "Dashboard", href: "/employee/dashboard" },
-    { label: "Dashboard Employer", href: "/employer/dashboard" },
+    // ...(userRole === 'is_employee' ? [
+      { label: "Find Job", href: "/employee/job-list" },
+      { label: "Post Job", href: "/employer/job-post" },
+    // ] : userRole === 'is_employer' ? [
+      { label: "Find FreeLancer", href: "/employer/client-list" },
+      { label: "Post Job", href: "/employer/job-post" },
+      { label: "Dashboard Employer", href: "/employer/dashboard" },
+    // ] : []),
   ];
+
 
   const handleClick = (event, index) => {
     if (selectedBreadcrumb === index) {
@@ -119,6 +134,10 @@ const Topbar = () => {
     setLanguage(lng);
   };
 
+  const handleRegisterClick = () => {
+    navigate('/signup');
+  };
+
   return (
     <Box
       sx={{
@@ -162,49 +181,66 @@ const Topbar = () => {
         </Breadcrumbs>
       )}
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ marginRight: "16px" }}>
-          <Avatar
-            alt="User Avatar"
-            src={user}
-            onClick={handleAvatarClick}
-            sx={{ cursor: "pointer" }}
-          />
-          <Popover
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={() => setAnchorEl(null)}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <Box sx={{ p: 2 }}>
-              <MenuItem onClick={handleProfileClick}>
-                <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                Profile
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                Settings
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleLogoutClick}>
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                Logout
-              </MenuItem>
+      {isAuthenticated ? (
+          <>
+            <Box sx={{ marginRight: "16px" }}>
+              <Avatar
+                alt="User Avatar"
+                src={user}
+                onClick={handleAvatarClick}
+                sx={{ cursor: "pointer" }}
+              />
+              <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <Box sx={{ p: 2 }}>
+                  <MenuItem onClick={handleProfileClick}>
+                    <ListItemIcon>
+                      <AccountCircleIcon />
+                    </ListItemIcon>
+                    Profile
+                  </MenuItem>
+                  <MenuItem>
+                    <ListItemIcon>
+                      <SettingsIcon />
+                    </ListItemIcon>
+                    Settings
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={handleLogoutClick}>
+                    <ListItemIcon>
+                      <LogoutIcon />
+                    </ListItemIcon>
+                    Logout
+                  </MenuItem>
+                </Box>
+              </Popover>
             </Box>
-          </Popover>
-        </Box>
+          </>
+        ) : (
+          <button variant="contained"
+                    sx={{
+                      background: "white",
+                      borderRadius: "4px",
+                      color: "var(--Primary-500, #0A65CC)",
+                      padding: "10px 20px",
+                      "&:hover": {
+                        color: "white", // Change text color to white on hover
+                      },
+                    }}onClick={handleRegisterClick} style={{ marginRight: '16px' }}>
+            Register
+          </button>
+        )}
         <Select
           value={language}
           onChange={(event) => handleChangeLanguage(event.target.value)}
