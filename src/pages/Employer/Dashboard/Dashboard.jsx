@@ -47,6 +47,7 @@ import miko from "../../../assets/miko.jpg";
 import EmployersLogo from "../../../assets/EmployersLogo.png";
 import MyJobs from "./MyJobs";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ConfirmationModal from "../../../components/Common/ConfirmationModal";
 
 const mockData = [
   { id: 1, name: "John Doe", position: "Software Engineer", status: "Applied" },
@@ -85,7 +86,7 @@ const columns = [
   components={{ Toolbar: GridToolbar }}
 />;
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, onClick }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -94,11 +95,13 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={() => {
+        setSelected(title);
+        if (onClick) onClick();
+      }}
       icon={icon}
     >
       <Typography>{title}</Typography>
-      {/* <Link to={to} /> */}
     </MenuItem>
   );
 };
@@ -109,12 +112,56 @@ const DashboardEmployer = () => {
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Overview");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     setIsCollapsed(isSmallScreen);
   }, [isSmallScreen]);
+
+  const handleLogoutClicked = () => {
+    setIsModalOpen(true);
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("User not authenticated. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/logout/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      } else {
+        console.error("Failed to logout:", response.statusText);
+        alert("Failed to logout. Please try again.");
+      }
+    } catch (error) {
+      console.error("An error occurred during logout:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setAnchorEl(null);
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   console.log(selected);
   return (
@@ -264,8 +311,9 @@ const DashboardEmployer = () => {
                     icon={<LogoutIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    onClick={handleLogoutClicked}
                     style={{ color: colors.grey[100] }}
-                  ></Item>
+                  />
                 </Box>
               </Menu>
             </ProSidebar>
@@ -280,6 +328,13 @@ const DashboardEmployer = () => {
           {selected === "Hire Requests" && <HireRequests />}
         </Grid>
       </Grid>
+      <ConfirmationModal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleLogout}
+        title="Confirm Logout"
+        content="Are you sure you want to logout?"
+      />
     </>
   );
 };
