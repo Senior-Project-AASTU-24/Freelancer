@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Stack } from '@mui/material';
 import PropTypes from 'prop-types';
 
+
 const Stat = ({ value, unit, variant }) => (
   <div
     style={{
@@ -37,28 +38,27 @@ const StatFullTemplate = () => {
     // Fetch job count
     fetch('http://localhost:8001/api/job-count/')
       .then((response) => response.json())
-      .then((data) => setJobCount(data.count))
+      .then((data) => setJobCount(data.job_count)) // Adjusted to match backend response structure
       .catch((error) => console.error('Error fetching job count:', error));
 
     // Fetch freelancer count
     fetch('http://localhost:8002/api/freelancer-count/')
       .then((response) => response.json())
-      .then((data) => setFreelancerCount(data.count))
+      .then((data) => setFreelancerCount(data.freelancer_count)) // Assuming this is correct
       .catch((error) => console.error('Error fetching freelancer count:', error));
 
     // Fetch employer count
     fetch('http://localhost:8001/api/postedbyid-count/')
       .then((response) => response.json())
-      .then((data) => setEmployerCount(data.count))
+      .then((data) => setEmployerCount(data.employer_count)) // Adjusted to match backend response structure
       .catch((error) => console.error('Error fetching employer count:', error));
 
     // Fetch feedback count
     fetch('http://localhost:8003/api/feedback-count/')
       .then((response) => response.json())
-      .then((data) => setFeedbackCount(data.count))
+      .then((data) => setFeedbackCount(data.feedback_count)) // Assuming this is correct
       .catch((error) => console.error('Error fetching feedback count:', error));
   }, []);
-
   return (
     <div style={{ paddingTop: '60px', paddingBottom: '60px' }}>
       <Stack direction="row" spacing={2} justifyContent="space-evenly">

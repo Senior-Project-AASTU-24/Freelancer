@@ -192,7 +192,7 @@ const PostedJob = () => {
             <Grid item xs={12} md={7}>
               <Typography variant="h4">Job Details</Typography>
               <Typography variant="h5">{taskDetail.job_title}</Typography>
-              <Typography>{taskDetail.description}</Typography>
+              <Typography>{taskDetail.job_description}</Typography>
             </Grid>
             <Grid item xs={12} md={1}>
               <Divider

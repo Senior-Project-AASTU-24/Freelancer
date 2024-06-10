@@ -9,30 +9,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { DataGrid } from "@mui/x-data-grid";
 
-const mockUpData = [
-  {
-    id: 1,
-    job: "Software Engineer",
-    dateApplied: "2022-01-01",
-    status: "Applied",
-    action: "Accept",
-  },
-  {
-    id: 2,
-    job: "Web Developer",
-    dateApplied: "2022-01-02",
-    status: "In Progress",
-    action: "Accept",
-  },
-  {
-    id: 3,
-    job: "Data Analyst",
-    dateApplied: "2022-01-03",
-    status: "Rejected",
-    action: "Accept",
-  },
-  // Add more mock data here
-];
+
 
 const HireRequests = () => {
   const theme = useTheme();
@@ -44,10 +21,21 @@ const HireRequests = () => {
 
   const handleSearch = (searchQuery) => {
     const filtered = mockUpData.filter((item) =>
-      item.job.toLowerCase().includes(searchQuery.toLowerCase())
+      item.employer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.request_date.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
     setCurrentPage(1);
+  };
+
+  const handleAccept = (id, jobTitle, freelancerName) => {
+    // Handle accept logic here
+    console.log(`Accepted: ${id}, ${jobTitle}, ${freelancerName}`);
+  };
+
+  const handleDecline = (id, jobTitle, freelancerName) => {
+    // Handle decline logic here
+    console.log(`Declined: ${id}, ${jobTitle}, ${freelancerName}`);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -55,59 +43,86 @@ const HireRequests = () => {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const columns = [
-    { field: "job", headerName: "Job", width: 200 },
-    { field: "dateApplied", headerName: "Date Applied", width: 200 },
-
-    { field: "action", headerName: "Action", width: 150 },
+    { field: 'employer_name', headerName: 'Candidate', width: 200 },
+    { field: 'request_date', headerName: 'Date Applied', width: 200 },
+    {
+      field: 'accept',
+      headerName: 'Accept',
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          onClick={() => handleAccept(params.row.id, params.row.job_title, params.row.freelancer_name)}
+          variant="contained"
+          color="success"
+          style={{ textTransform: 'none' }}
+        >
+          Accept
+        </Button>
+      ),
+    },
+    {
+      field: 'decline',
+      headerName: 'Decline',
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          onClick={() => handleDecline(params.row.id, params.row.job_title, params.row.freelancer_name)}
+          variant="contained"
+          color="error"
+          style={{ textTransform: 'none' }}
+        >
+          Decline
+        </Button>
+      ),
+    },
   ];
 
   return (
-    <div>
-      <Box m="50px">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Search
-            data={mockUpData}
-            setData={setFilteredData}
-            placeholder="Search jobs..."
-            searchKeys={["job", "dateApplied", "status"]}
-          />
-        </Box>
-        <Box
-          m="40px 0 0 0"
-          height="75vh"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .name-column--cell": {
-              color: colors.greenAccent[300],
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: colors.blueAccent[700],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: colors.primary[400],
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: colors.blueAccent[700],
-            },
-            "& .MuiCheckbox-root": {
-              color: `${colors.greenAccent[200]} !important`,
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${colors.grey[100]} !important`,
-            },
-          }}
-        >
-          <DataGrid rows={currentItems} columns={columns} />
-        </Box>
+    <Box m="50px">
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Search
+          data={filteredData}
+          setData={setFilteredData}
+          placeholder="Search request..."
+          searchKeys={['employer_name', 'request_date']}
+          onSearch={handleSearch}
+        />
       </Box>
-    </div>
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          '& .MuiDataGrid-root': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: 'none',
+          },
+          '& .name-column--cell': {
+            color: colors.greenAccent[300],
+          },
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: 'none',
+          },
+          '& .MuiDataGrid-virtualScroller': {
+            backgroundColor: colors.primary[400],
+          },
+          '& .MuiDataGrid-footerContainer': {
+            borderTop: 'none',
+            backgroundColor: colors.blueAccent[700],
+          },
+          '& .MuiCheckbox-root': {
+            color: `${colors.greenAccent[200]} !important`,
+          },
+          '& .MuiDataGrid-toolbarContainer .MuiButton-text': {
+            color: `${colors.grey[100]} !important`,
+          },
+        }}
+      >
+        <DataGrid rows={currentItems} columns={columns} pageSize={itemsPerPage} />
+      </Box>
+    </Box>
   );
 };
 
