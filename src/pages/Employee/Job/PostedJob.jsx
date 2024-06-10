@@ -10,6 +10,7 @@ import {
   FormControl,
   Input,
   InputAdornment,
+  Paper,
 } from "@mui/material";
 import LinearProgress, {
   linearProgressClasses,
@@ -41,6 +42,19 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
+
+const CommentBox = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[3],
+  transition: 'transform 0.2s ease-in-out',
+  '&:hover': {
+    transform: 'scale(1.02)',
+  },
+}));
+
 const PostedJobEmployee = () => {
   const navigate = useNavigate();
   const theme = useTheme();
@@ -54,6 +68,7 @@ const PostedJobEmployee = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState("");
   const [comments, setComments] = useState([]);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (jobId) {
@@ -62,33 +77,32 @@ const PostedJobEmployee = () => {
         .then((response) => response.json())
         .then((data) => {
           const milestonesWithTasks = Array(data.milestone).fill({
-            tasks: Array(5).fill({ checked: false }),
+           checked: false
           });
           setMilestones(milestonesWithTasks);
-        });
-
-      // Fetch comments and ratings
-      fetch(`http://localhost:8002/api/analyze-sentiment/${jobId}/`)
-        .then((response) => response.json())
-        .then((data) => {
-          setComments(data);
         });
     }
   }, [jobId]);
 
-  const handleCheckboxChange = (milestoneId, taskId) => {
-    setMilestones((prevMilestones) =>
-      prevMilestones.map((milestone, index) =>
-        index === milestoneId
-          ? {
-              ...milestone,
-              tasks: milestone.tasks.map((task, taskIndex) =>
-                taskIndex === taskId
-                  ? { ...task, checked: !task.checked }
-                  : task
-              ),
-            }
-          : milestone
+  
+  useEffect(() => {
+    fetch('http://localhost:8003/api/sentiments/user/', {
+      method: "GET",
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setComments(data)
+      })
+      .catch((error) => console.error("Error fetching sentiment data:", error));
+  }, []);
+
+  const handleCheckboxChange = (index) => {
+    setMilestones(prevMilestones =>
+      prevMilestones.map((milestone, i) =>
+        i === index ? { ...milestone, checked: !milestone.checked } : milestone
       )
     );
   };
@@ -100,9 +114,6 @@ const PostedJobEmployee = () => {
       alert("User not authenticated. Please log in.");
       return;
     }
-    if (currentMilestoneIndex < milestones.length - 1) {
-      setCurrentMilestoneIndex(currentMilestoneIndex + 1);
-    } else {
       // Submit the task
       const formData = new FormData();
       formData.append("job_applied", jobId);
@@ -123,7 +134,7 @@ const PostedJobEmployee = () => {
         .then((data) => {
           console.log("Task submitted:", data);
         });
-    }
+    
   };
 
   const handleFileChange = (event) => {
@@ -139,11 +150,8 @@ const PostedJobEmployee = () => {
     }
   };
 
-  const currentMilestone = milestones[currentMilestoneIndex] || { tasks: [] };
-  const completedTasks = currentMilestone.tasks.filter(
-    (task) => task.checked
-  ).length;
-  const totalTasks = currentMilestone.tasks.length;
+  const completedTasks = milestones.filter(milestone => milestone.checked).length;
+  const totalTasks = milestones.length;
 
   const toggleChatModal = () => {
     setIsChatModalOpen(!isChatModalOpen);
@@ -204,73 +212,14 @@ const PostedJobEmployee = () => {
                 >
                   <Typography color={"white"}>OnGoing</Typography>
                 </Button>
-                <Box marginTop={2}></Box>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={5}>
-                    {/* <svg
-                      width="200"
-                      height="200"
-                      viewBox="0 0 200 200"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <linearGradient
-                          id="grad1"
-                          x1="0%"
-                          y1="0%"
-                          x2="100%"
-                          y2="0%"
-                        >
-                          <stop
-                            offset="0%"
-                            style={{ stopColor: "#8DF25D", stopOpacity: 1 }}
-                          />
-                          <stop
-                            offset="100%"
-                            style={{ stopColor: "#22C9A3", stopOpacity: 1 }}
-                          />
-                        </linearGradient>
-                      </defs>
-                      <g fill="url(#grad1)">
-                        <path d="M100 40c16 0 30 6 40 16l-16 16c-6-6-14-10-24-10-10 0-20 4-26 10-6 6-10 16-10 26 0 10 4 20 10 26 6 6 16 10 26 10 10 0 18-4 24-10l16 16c-10 10-24 16-40 16-32 0-60-28-60-60s28-60 60-60z" />
-                        <path d="M140 100c10 0 20 4 26 10 6 6 10 16 10 26 0 10-4 20-10 26-6 6-16 10-26 10s-20-4-26-10c-6-6-10-16-10-26 0-10 4-20 10-26 6-6 16-10 26-10z" />
-                      </g>
-                      <text
-                        x="50"
-                        y="180"
-                        font-family="Arial"
-                        font-size="60"
-                        fill="url(#grad1)"
-                      >
-                        Chapa
-                      </text>
-                    </svg> */}
-                    <img
-                      src={chapaImg}
-                      alt="Logo"
-                      // onClick={handleChapaClick}
-                      style={{
-                        borderRadius: "50%",
-                        maxWidth: "100%",
-                        height: "auto",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </Grid>
-                  {/* <Grid item xs={12} md={7}>
-                    <Typography {...largeTypographyProps}>$ 150</Typography>
-                  </Grid> */}
-                </Grid>
                 <Box marginTop={2}>
-                  {currentMilestone.tasks.map((task, index) => (
+                  {milestones.map((milestone, index) => (
                     <div key={index}>
                       <label>
                         <input
                           type="checkbox"
-                          checked={task.checked}
-                          onChange={() =>
-                            handleCheckboxChange(currentMilestoneIndex, index)
-                          }
+                          checked={milestone.checked}
+                          onChange={() => handleCheckboxChange(index)}
                         />
                         {` Task ${index + 1}`}
                       </label>
@@ -280,12 +229,11 @@ const PostedJobEmployee = () => {
               </Box>
             </Grid>
           </Grid>
-          <Divider
-            orientation="horizontal"
-            style={{ height: "1px", backgroundColor: "black", marginTop: 10 }}
-          />
+          <Divider orientation="horizontal" style={{ height: '1px', backgroundColor: 'black', marginTop: 10 }} />
         </Box>
-        <Box marginTop={5}>{/* Other component code */}</Box>
+        <Box marginTop={5}>
+          {/* Other component code */}
+        </Box>
         <Box marginTop={3}>
           <Typography variant="h6">Github Link</Typography>
           <FormControl variant="standard" fullWidth>
@@ -313,16 +261,6 @@ const PostedJobEmployee = () => {
         <Box margin={5}>
           <Divider />
         </Box>
-        <Box margin={2} borderRadius={4}>
-          {comments.map((comment, index) => (
-            <Box key={index} mb={2}>
-              <Typography variant="body2">{comment.text}</Typography>
-              <Typography variant="caption">
-                Rating: {comment.rating}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
         <Box display="flex" justifyContent="right" marginTop={3}>
           <Button
             variant="contained"
@@ -335,6 +273,31 @@ const PostedJobEmployee = () => {
             Complete Milestone
           </Button>
         </Box>
+        <Box margin={2} borderRadius={4}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Feedbacks Given
+          </Typography>
+          <Divider />
+          {comments.length > 0 ? (
+            comments.map((comment, index) => (
+              <CommentBox key={index}>
+                <Grid container spacing={2} alignItems="center"> 
+                  <Grid item xs={9}>
+                    <Typography variant="body2">Feedback: {comment.comment}</Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography variant="caption">
+                      Rating: {comment.rate}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </CommentBox>
+            ))
+          ) : (
+            <Typography variant="body2">No comments found.</Typography>
+          )}
+        </Box>
+        
         <Box
           position="fixed"
           bottom={20}

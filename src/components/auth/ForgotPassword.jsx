@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Box, TextField, Button, Typography } from '@mui/material';
 import { Formik, Form } from 'formik';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const ForgotPassword = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showResetForm, setShowResetForm] = useState(true);
+  const navigate = useNavigate();
 
   const handleEmailSubmit = async (values, { setSubmitting }) => {
     try {
@@ -18,8 +20,7 @@ const ForgotPassword = () => {
       if (response.status === 200) {
         setMessage(data.success);
         setShowResetForm(false);
-        // setUidb64(data.uidb64);
-        // setToken(data.token);
+        
       } else {
         setMessage(data.error);
       }
@@ -36,6 +37,7 @@ const ForgotPassword = () => {
       const data = response.data;
       if (response.status === 200) {
         setMessage(data.message);
+        navigate('/login');
       } else {
         setMessage('Password reset failed');
       }

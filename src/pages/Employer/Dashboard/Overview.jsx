@@ -125,7 +125,7 @@ const Overview = () => {
       {" "}
       <Box marginTop={5} marginRight={3}>
         <Typography {...mediumTypographyProps}>Hello, 
-        {/* {userInfo.username} */}
+        {userInfo.username}
         </Typography>
         <Typography {...smallTypographyProps}>
           Here is your activities & career opportunities

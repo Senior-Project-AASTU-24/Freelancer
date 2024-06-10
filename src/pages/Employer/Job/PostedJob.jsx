@@ -215,10 +215,11 @@ const PostedJob = () => {
                     alignItems: "center",
                     gap: "8px",
                     borderRadius: "6px",
-                    background: "var(--WF-Base-800, #2D3648)",
+                    background: "var(--WF-Base-800, #2D3648)"  
                   }}
+                  onClick={handleChapaClick}
                 >
-                  <Typography color={"white"}>OnGoing</Typography>
+                  <Typography color={"white"}>Pay</Typography>
                 </Button>
                 <Box marginTop={2}></Box>
                 <Grid container spacing={2}>
@@ -298,7 +299,7 @@ const PostedJob = () => {
                 <TextField
                   fullWidth
                   id="outlined-multiline-static"
-                  placeholder="Write your comment for this specific milestone..."
+                  placeholder="Write your feedback for this specific task submission.../ ስለስራው አስተያየት ይስጡ"
                   name="comment"
                   value={values.comment}
                   onChange={handleChange}

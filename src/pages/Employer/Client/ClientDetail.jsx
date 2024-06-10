@@ -30,26 +30,43 @@ import { tokens } from "../../../theme";
 import SchoolIcon from "@mui/icons-material/School";
 
 const ClientDetail = () => {
-  const { freelancerId } = useParams();
+  const { freelancerId, userId } = useParams();
   const [freelancer, setFreelancer] = useState(null);
+  const [rating, setRating] = useState(null);
   const [buttonText, setButtonText] = useState("Hire Now");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch(`http://localhost:8002/api/freelancers/${freelancerId}/`)
-      .then((response) => response.json())
-      .then((data) => setFreelancer(data))
-      .catch((error) =>
-        console.error("Error fetching freelancer data:", error)
-      );
-  }, [freelancerId]);
+    const fetchFreelancerData = async () => {
+      try {
+        const freelancerResponse = await fetch(`http://localhost:8002/api/freelancers/${freelancerId}/`);
+        if (!freelancerResponse.ok) {
+          throw new Error('Failed to fetch freelancer data');
+        }
+        const freelancerData = await freelancerResponse.json();
+        setFreelancer(freelancerData);
 
-  if (!freelancer) {
+        const ratingResponse = await fetch(`http://localhost:8002/api/freelancer-rating/${userId}/`);
+        if (!ratingResponse.ok) {
+          throw new Error('Failed to fetch freelancer rating');
+        }
+        const ratingData = await ratingResponse.json();
+        setRating(ratingData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchFreelancerData();
+  }, [freelancerId,userId]);
+
+  if (!freelancer || !rating) {
     return <div>Loading...</div>;
   }
 
+  const scaledRating = rating.average_rate / 2;
   const handleHireClick = () => {
     const payload = {
       freelancer_id: freelancerId,
@@ -167,17 +184,10 @@ const ClientDetail = () => {
                 </Typography>
                 <Divider sx={{ m: "10px" }} />
                 <Typography {...mediumTypographyProps}>Rating</Typography>
-                {/* Assuming freelancer.skills is an array of skills */}
-                {/* <Stack direction="row" spacing={1} sx={{ marginTop: 3 }}>
-                  {freelancer.skills?.map((skill, index) => (
-                    <Chip
-                      key={index}
-                      label={skill}
-                      sx={{ background: colors.blueAccent[600] }}
-                    />
-                  ))}
-                </Stack> */}
-                <Rating value={freelancer?.rating} readOnly precision={0.5} />{" "}
+                <Typography {...smallTypographyProps}>
+                {rating.average_rate} / 10
+                </Typography>
+                <Rating value={scaledRating} readOnly precision={0.5} />{" "}
                 {/* not sure if you have a value called rating... */}
               </Box>
             </Grid>

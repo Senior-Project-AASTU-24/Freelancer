@@ -43,8 +43,8 @@ const ClientList = () => {
     setCurrentPage(value);
   };
 
-  const handleFreelancerClick = (freelancerId) => {
-    navigate(`/employer/client-detail/${freelancerId}`);
+  const handleFreelancerClick = (freelancerId, userId) => {
+    navigate(`/employer/client-detail/${freelancerId}/${userId}`);
   };
 
   return (
@@ -70,7 +70,7 @@ const ClientList = () => {
                   employerName={freelancer.name}
                   location={freelancer.location}
                   rating={freelancer.rating} // not sure if you have a value called rating...
-                  onClick={() => handleFreelancerClick(freelancer.id)}
+                  onClick={() => handleFreelancerClick(freelancer.id, freelancer.user_id)}
                 />
               </Box>
             </Grid>
