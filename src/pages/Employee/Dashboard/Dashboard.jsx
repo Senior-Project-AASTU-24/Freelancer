@@ -170,7 +170,7 @@ const Dashboard = () => {
                       ml="15px"
                     >
                       <Typography variant="h4" color={colors.grey[100]}>
-                        FreeLancer
+                        WorkWhiz
                       </Typography>
                       <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                         <MenuOutlinedIcon />

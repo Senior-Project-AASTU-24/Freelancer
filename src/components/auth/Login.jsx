@@ -1,14 +1,14 @@
-import React, { useState ,useEffect }from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Box, useTheme, Container, Divider } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../utils/Header";
 import * as yup from "yup";
-import { Formik , Form} from "formik";
+import { Formik, Form } from "formik";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const validationSchema = yup.object({
@@ -23,12 +23,12 @@ const Login = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
-  const [token, setToken]= useState('')
+  const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
- 
+
   const resetForm = () => {
     setFormData({
       username: "",
@@ -44,30 +44,29 @@ const Login = () => {
       .required("Password is required"),
   });
 
-
-
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/login/", values);// Replace with your backend URL
-      console.log(response.data); 
-      localStorage.setItem('token', response.data.access);
-    
-      if (response.data.role === 'employee') {
-        navigate('/employee/dashboard');
-      } else if (response.data.role === 'employer') {
-        navigate('/employer/dashboard');
-      } else if (response.data.role === 'admin'){
-        navigate('/admin/dashboard');
+      const response = await axios.post(
+        "http://localhost:8000/api/login/",
+        values
+      ); // Replace with your backend URL
+      console.log(response.data);
+      localStorage.setItem("token", response.data.access);
+
+      if (response.data.role === "employee") {
+        navigate("/employee/dashboard");
+      } else if (response.data.role === "employer") {
+        navigate("/employer/dashboard");
+      } else if (response.data.role === "admin") {
+        navigate("/admin/dashboard");
         // navigate('/payment');
       }
 
       // resetForm();
     } catch (error) {
       console.error("Error:", error.response.data); // Handle error response
-    } 
-    
+    }
   };
-
 
   return (
     <div>
@@ -87,7 +86,7 @@ const Login = () => {
               alignItems: "center",
             }}
           >
-            <Header bold="Log in to FreeLancer" color="#FFFFFF" />
+            <Header bold="Log in to WorkWhiz" color="#FFFFFF" />
           </Box>
 
           <Formik
@@ -95,7 +94,14 @@ const Login = () => {
             validationSchema={schema}
             onSubmit={handleSubmit}
           >
-           {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+            }) => (
               <Form>
                 <Box display="grid" gap="10px">
                   <TextField
@@ -106,7 +112,7 @@ const Login = () => {
                     label="Email"
                     name="email"
                     autoComplete="email"
-                    value= {values.email}
+                    value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={!!touched.email && !!errors.email}
@@ -128,15 +134,11 @@ const Login = () => {
                     name="password"
                     type="password"
                     autoComplete="current-password"
-                    value= {values.password}
+                    value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={
-                      !!touched.password && !!errors.password
-                    }
-                    helperText={
-                    touched.password && errors.password
-                    }
+                    error={!!touched.password && !!errors.password}
+                    helperText={touched.password && errors.password}
                     InputProps={{
                       sx: { backgroundColor: "#2B2B2B", borderRadius: "8px" },
                     }}
@@ -204,9 +206,9 @@ const Login = () => {
                         gutterBottom
                         fontWeight="bold"
                       >
-                      <Link href="/google" color="#FFFFFF">
-                      {"Facebook"}
-                    </Link>
+                        <Link href="/google" color="#FFFFFF">
+                          {"Facebook"}
+                        </Link>
                       </Typography>
                     }
                   </Button>
@@ -227,9 +229,9 @@ const Login = () => {
                         gutterBottom
                         fontWeight="bold"
                       >
-                      <Link href="/google" color="#FFFFFF">
-                      {"Google"}
-                    </Link>
+                        <Link href="/google" color="#FFFFFF">
+                          {"Google"}
+                        </Link>
                       </Typography>
                     }
                   </Button>

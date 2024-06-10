@@ -85,7 +85,7 @@ const Footer = () => {
                       lineHeight="40px"
                     >
                       {" "}
-                      Freelancer
+                      WorkWhiz
                     </Typography>
                   </Box>
                   <Box

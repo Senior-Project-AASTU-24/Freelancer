@@ -370,7 +370,7 @@ const Index = () => {
         >
           <Box mt={7} textAlign="center">
             <Typography {...largeTypographyProps}>
-              {t("How Freelancer work")}
+              {t("How WorkWhiz work")}
             </Typography>
           </Box>
           <Grid container spacing={0}>
