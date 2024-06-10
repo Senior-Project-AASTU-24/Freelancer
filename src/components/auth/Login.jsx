@@ -190,7 +190,7 @@ const Login = () => {
                     </Typography>{" "}
                   </Divider>
                 </Box>
-                <Box display="grid" gap="10px" mt="20px">
+                {/* <Box display="grid" gap="10px" mt="20px">
                   <Button
                     variant="contained"
                     style={{
@@ -212,8 +212,8 @@ const Login = () => {
                       </Typography>
                     }
                   </Button>
-                </Box>
-                <Box display="grid" gap="10px" mt="20px">
+                </Box> */}
+                {/* <Box display="grid" gap="10px" mt="20px">
                   <Button
                     variant="contained"
                     style={{
@@ -235,7 +235,7 @@ const Login = () => {
                       </Typography>
                     }
                   </Button>
-                </Box>
+                </Box> */}
                 <Box
                   display="grid"
                   gap="10px"

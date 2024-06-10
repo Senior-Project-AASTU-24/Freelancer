@@ -235,13 +235,13 @@ const Dashboard = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
-                  <Item
+                  {/* <Item
                     title="Favorite Jobs"
                     to="/"
                     icon={<FavoriteIcon />}
                     selected={selected}
                     setSelected={setSelected}
-                  />
+                  /> */}
                   <Item
                     title="Hire Requests"
                     to="/"
