@@ -25,9 +25,9 @@ function Transactions() {
         </thead>
         <tbody>
           {transactions.map(transaction => (
-            <tr key={transaction.payment_time}>
-              <td>{transaction.payment_time}</td>
-              <td>{transaction.payment_amount}</td>
+            <tr key={transaction.created_at}>
+              <td>{transaction.created_at}</td>
+              <td>{transaction.amount}</td>
             </tr>
           ))}
         </tbody>

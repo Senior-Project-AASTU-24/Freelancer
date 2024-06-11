@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -9,15 +9,42 @@ import {
   TextField,
   useTheme,
 } from "@mui/material";
-import { tokens } from "../../../../theme";
 
 const ChatModal = ({ open, onClose }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    if (open && !socket) {
+      const newSocket = new WebSocket("ws://localhost:8001/ws/employer/chat/");
+      setSocket(newSocket);
+
+      newSocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setMessages((prevMessages) => [...prevMessages, data.message]);
+      };
+
+      newSocket.onclose = () => {
+        console.log("WebSocket closed");
+      };
+
+      return () => {
+        newSocket.close();
+      };
+    }
+  }, [open]); // Removed `socket` from the dependency array
+
+  const sendMessage = () => {
+    if (socket && message.trim()) {
+      socket.send(JSON.stringify({ message }));
+      setMessage("");
+    }
+  };
 
   const dialogBackdropStyle = {
-    backdropFilter: "blur(10px)", // Adjust the blur strength as needed
-    backgroundColor: "rgba(255, 255, 255, 0.5)", // Adjust the opacity as needed
+    backdropFilter: "blur(10px)",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
   };
 
   return (
@@ -27,30 +54,35 @@ const ChatModal = ({ open, onClose }) => {
       maxWidth="sm"
       fullWidth
       BackdropProps={{
-        sx: dialogBackdropStyle, // Apply the backdrop style
+        sx: dialogBackdropStyle,
       }}
     >
       <DialogTitle>Chat</DialogTitle>
       <DialogContent>
-        {/* Chat content */}
-        <Box>
-          {/* Messages */}
-          <Box mb={2}>
-            {/* Replace this with your actual messages */}
-            <div>User 1: Hello!</div>
-            <div>User 2: Hi there!</div>
-          </Box>
-          {/* Text input for sending messages */}
-          <TextField label="Type your message" fullWidth />
+        <Box mb={2} style={{ maxHeight: "400px", overflowY: "auto" }}>
+          {messages.map((msg, index) => (
+            <div key={index}>{msg}</div>
+          ))}
         </Box>
+        <TextField
+          label="Type your message"
+          fullWidth
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
+        />
       </DialogContent>
       <DialogActions>
-        {/* Button to close the modal */}
-        <Button>Send</Button>
+        <Button onClick={sendMessage} color="primary">
+          Send
+        </Button>
         <Button onClick={onClose} color="primary">
           Close
         </Button>
-        {/* Additional actions can be added here */}
       </DialogActions>
     </Dialog>
   );

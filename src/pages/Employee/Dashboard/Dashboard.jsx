@@ -267,12 +267,13 @@ const Dashboard = () => {
                     setSelected={setSelected}
                   />
                   <Item
-                    title="Hire Requests"
+                    title="Favorite Jobs"
                     to="/"
-                    icon={<RemoveRedEyeIcon />}
+                    icon={<FavoriteIcon />}
                     selected={selected}
                     setSelected={setSelected}
                   />
+
                   <Item
                     title="Settings"
                     to="/"
@@ -300,7 +301,6 @@ const Dashboard = () => {
           {selected === "Accepted Jobs" && <AcceptedJobs />}
           {selected === "Settings" && <Settings />}
           {selected === "Favorite Jobs" && <FavoriteJobs />}
-          {selected === "Hire Requests" && <HireRequests />}
         </Grid>
       </Grid>
       <ConfirmationModal

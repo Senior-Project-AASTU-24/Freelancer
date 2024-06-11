@@ -47,10 +47,38 @@ const Index = () => {
   const cta1Ref = useRef(null);
   const cta2Ref = useRef(null);
   const { t } = useTranslation();
-
+  const [totalJob, setTotalJob] = useState(0);
+  const [totalEmployer, setTotalEmployer] = useState(0);
+  const [totalFreelancer, setTotalFreelancer] = useState(0);
   useEffect(() => {
-    setIsVisible(true); // Set isVisible to true when component mounts
+    setIsVisible(true);
+
+    fetch('http://localhost:8001/api/job-count/', {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => setTotalJob(data.job_count)) // Adjusted to match backend response structure
+    .catch((error) => console.error('Error fetching job count:', error));
+
+    fetch('http://localhost:8001/api/postedbyid-count/', {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => setTotalEmployer(data.employer_count)) // Adjusted to match backend response structure
+    .catch((error) => console.error('Error fetching job count:', error));
+
+    fetch('http://localhost:8002/api/freelancer-count/', {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => setTotalFreelancer(data.freelancer_count)) // Adjusted to match backend response structure
+    .catch((error) => console.error('Error fetching job count:', error));
+
+    
   }, []);
+
+
+ 
 
   useEffect(() => {
     const options = {

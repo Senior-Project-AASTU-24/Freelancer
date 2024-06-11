@@ -36,7 +36,7 @@ const ClientDetail = () => {
   const [buttonText, setButtonText] = useState("Hire Now");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const token = localStorage.getItem("token");
+  
 
   useEffect(() => {
     const fetchFreelancerData = async () => {
@@ -72,27 +72,34 @@ const ClientDetail = () => {
 
   const scaledRating = rating.average_rate / 2;
   const handleHireClick = () => {
+    const token = localStorage.getItem("token");
     const payload = {
       freelancer_id: freelancerId,
     };
+  
     fetch("http://localhost:8001/api/make-request/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     })
       .then((response) => {
         if (response.ok) {
-          setButtonText("Request Sent");
+          return response.json();
         } else {
-          console.error("Error sending hire request");
+          return response.json().then((errorData) => {
+            throw new Error(errorData.error || "Error sending hire request");
+          });
         }
+      })
+      .then((data) => {
+        setButtonText("Request Sent");
+        console.log("Hire request sent successfully:", data);
       })
       .catch((error) => console.error("Error sending hire request:", error));
   };
-
   const mediumTypographyProps = {
     variant: "h6",
     component: "h2",

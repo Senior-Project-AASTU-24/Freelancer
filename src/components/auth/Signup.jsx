@@ -312,9 +312,9 @@ const Signup = () => {
                         gutterBottom
                         fontWeight="bold"
                       >
-                        <Link href="/facebook" color="#FFFFFF">
-                          {"Facebook"}
-                        </Link>
+                       <Link href="/facebook" color="#FFFFFF">
+                      {"Facebook"}
+                    </Link>
                       </Typography>
                     }
                   </Button>

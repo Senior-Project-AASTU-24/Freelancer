@@ -18,7 +18,7 @@ const Performance = () => {
   return (
     <div>
       <LineChart
-        xAxis={[{ data: data.map(item => item.time) }]}
+        xAxis={[{ data: data.map(item => item.posted_at) }]}
         series={[
           {
             data: data.map(item => item.job_count),

@@ -68,6 +68,7 @@ const PostedJobEmployee = () => {
   const [fileError, setFileError] = useState("");
   const [comments, setComments] = useState([]);
   const token = localStorage.getItem("token");
+  const [jobDetail, setJobDetail] = useState(null);
 
   useEffect(() => {
     if (jobId) {
@@ -79,6 +80,7 @@ const PostedJobEmployee = () => {
             checked: false,
           });
           setMilestones(milestonesWithTasks);
+          setJobDetail(data);
         });
     }
   }, [jobId]);
@@ -173,22 +175,8 @@ const PostedJobEmployee = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={7}>
               <Typography variant="h4">Job Details</Typography>
-              <Typography variant="h5">
-                Create React Project in GitHub out of a Website Template
-              </Typography>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a
-                fringilla tortor. Donec eu diam ut javascript Copy code velit
-                auctor ultrices. Mauris in augue pellentesque mauris dignissim
-                hendrerit at in purus. Praesent nisi sem, vehicula quis mi non,
-                interdum iaculis mi. Sed sit amet dui fermentum, blandit felis
-                sit amet, laoreet lorem. Proin eget quam nulla. Nam pharetra
-                gravida magna sit amet pharetra. Ut porttitor, augue vel maximus
-                blandit, orci magna tempor lorem, sed elementum leo justo et
-                quam. Praesent eu varius ex. Maecenas cursus volutpat nibh vel
-                efficitur. Ut id erat malesuada, lacinia lectus quis, ornare
-                diam.
-              </Typography>
+              <Typography variant="h5">{jobDetail.title}</Typography>
+              <Typography>{jobDetail.description}</Typography>
             </Grid>
             <Grid item xs={12} md={1}>
               <Divider

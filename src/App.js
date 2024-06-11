@@ -11,7 +11,6 @@ import { CssBaseline } from "@mui/material";
 import Signup from "./components/auth/Signup";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import GoogleSignUp from "./components/auth/GoogleSignup";
-import FacebookSignup from "./components/auth/FacebookSignup";
 import ClientList from "./pages/Employer/Client/ClientList";
 import JobList from "./pages/Employee/Job/JobList";
 import JobDetail from "./pages/Employee/Job/JobDetail";
@@ -52,7 +51,6 @@ function App() {
         />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/google" element={<GoogleSignUp />} />
-        <Route path="/facebook" element={<FacebookSignup />} />
         <Route path="/employer/client-list" element={<ClientList />} />
         <Route path="/employee/job-list" element={<JobList />} />
         <Route path="/employee/job-detail/:jobId" element={<JobDetail />} />

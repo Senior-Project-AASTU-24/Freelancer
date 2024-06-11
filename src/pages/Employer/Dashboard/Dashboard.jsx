@@ -283,13 +283,7 @@ const DashboardEmployer = () => {
                     selected={selected}
                     setSelected={setSelected}
                   />
-                  <Item
-                    title="Favorited Candidate"
-                    to="/"
-                    icon={<FavoriteIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
+                  
                   <Item
                     title="Hire Requests"
                     to="/"
@@ -324,7 +318,6 @@ const DashboardEmployer = () => {
           {selected === "My Jobs" && <MyJobs />}
           {selected === "Accepted Jobs" && <AcceptedJobs />}
           {selected === "Settings" && <Settings />}
-          {selected === "Favorited Candidate" && <FavoriteJobs />}
           {selected === "Hire Requests" && <HireRequests />}
         </Grid>
       </Grid>
