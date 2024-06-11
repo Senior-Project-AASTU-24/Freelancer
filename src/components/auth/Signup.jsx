@@ -9,19 +9,16 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
-  const [role, setRole] = useState('employee');
-  
+  const [role, setRole] = useState("employee");
 
   const schema = yup.object({
     email: yup.string().email("Invalid email address").required("Required"),
@@ -39,15 +36,24 @@ const Signup = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const datas = { ...values, is_employee: role === 'employee', is_employer: role === 'employer' };
-      const response = await axios.post("http://localhost:8000/api/register/", datas);// Replace with your backend URL
+      const datas = {
+        ...values,
+        is_employee: role === "employee",
+        is_employer: role === "employer",
+      };
+      const response = await axios.post(
+        "http://localhost:8000/api/register/",
+        datas
+      ); // Replace with your backend URL
       console.log(response.data); // Handle success response
-      toast.info("Thank you for joining us. we have sent you verification link to your email, please verify your email by clicking the link!");
-      navigate('/login');
+      toast.info(
+        "Thank you for joining us. we have sent you verification link to your email, please verify your email by clicking the link!"
+      );
+      navigate("/login");
       //resetForm();
     } catch (error) {
       console.error("Error:", error.response.data); // Handle error response
-    } 
+    }
   };
   return (
     <div>
@@ -67,7 +73,7 @@ const Signup = () => {
               alignItems: "center",
             }}
           >
-            <Header bold="Sign up to FreeLancer" color="#FFFFFF" />
+            <Header bold="Sign up to WorkWhiz" color="#FFFFFF" />
           </Box>
 
           <Formik
@@ -81,7 +87,14 @@ const Signup = () => {
             validationSchema={schema}
             onSubmit={handleSubmit}
           >
-           {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+            }) => (
               <Form>
                 <Box display="grid" gap="10px">
                   <TextField
@@ -92,16 +105,12 @@ const Signup = () => {
                     label="Full Name"
                     name="name"
                     autoComplete="name"
-                    value= {values.name}
+                    value={values.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={
-                      touched.name && errors.name
-                    }
-                    helperText={
-                      touched.name && errors.name 
-                    }
-                   // {...formik.getFieldProps("name")}
+                    error={touched.name && errors.name}
+                    helperText={touched.name && errors.name}
+                    // {...formik.getFieldProps("name")}
                     InputProps={{
                       sx: { backgroundColor: "#2B2B2B", borderRadius: "8px" },
                     }}
@@ -117,15 +126,11 @@ const Signup = () => {
                     label="Username"
                     name="username"
                     autoComplete="username"
-                    value= {values.username}
+                    value={values.username}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={
-                      touched.username && errors.username
-                    }
-                    helperText={
-                      touched.username && errors.username 
-                    }
+                    error={touched.username && errors.username}
+                    helperText={touched.username && errors.username}
                     // {...formik.getFieldProps("username")}
                     InputProps={{
                       sx: { backgroundColor: "#2B2B2B", borderRadius: "8px" },
@@ -142,15 +147,11 @@ const Signup = () => {
                     label="Email"
                     name="email"
                     autoComplete="email"
-                    value= {values.email}
+                    value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    error={
-                      touched.email && errors.email
-                    }
-                    helperText={
-                      touched.email && errors.email 
-                    }
+                    error={touched.email && errors.email}
+                    helperText={touched.email && errors.email}
                     // {...formik.getFieldProps("email")}
                     InputProps={{
                       sx: { backgroundColor: "#2B2B2B", borderRadius: "8px" },
@@ -169,16 +170,11 @@ const Signup = () => {
                     name="password"
                     type="password"
                     autoComplete="current-password"
-                    value= {values.password}
+                    value={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    
-                    error={
-                      touched.password && errors.password
-                    }
-                    helperText={
-                      touched.password && errors.password 
-                    }
+                    error={touched.password && errors.password}
+                    helperText={touched.password && errors.password}
                     // {...formik.getFieldProps("password")}
                     InputProps={{
                       sx: { backgroundColor: "#2B2B2B", borderRadius: "8px" },
@@ -198,10 +194,12 @@ const Signup = () => {
                     type="password"
                     autoComplete="current-password"
                     value={values.confirm_password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.confirm_password && errors.confirm_password}
-                      helperText={touched.confirm_password && errors.confirm_password }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.confirm_password && errors.confirm_password}
+                    helperText={
+                      touched.confirm_password && errors.confirm_password
+                    }
                     // {...formik.getFieldProps("confirmPassword")}
                     InputProps={{
                       sx: { backgroundColor: "#2B2B2B", borderRadius: "8px" },
@@ -217,14 +215,14 @@ const Signup = () => {
                     <Grid item xs={6}>
                       <Button
                         fullWidth
-                        variant={role === 'employer' ? "contained" : "outlined"}
+                        variant={role === "employer" ? "contained" : "outlined"}
                         style={{
                           height: "65px",
                           backgroundColor: "#0055FF",
                           color: "white",
                           borderRadius: "8px",
                         }}
-                        onClick={() => setRole('employer')}
+                        onClick={() => setRole("employer")}
                       >
                         {" "}
                         <Typography
@@ -240,14 +238,14 @@ const Signup = () => {
                     <Grid item xs={6}>
                       <Button
                         fullWidth
-                        variant={role === 'employee' ? "contained" : "outlined"}
+                        variant={role === "employee" ? "contained" : "outlined"}
                         style={{
                           height: "65px",
                           backgroundColor: "#D1DEFD",
                           color: "#0055FF",
                           borderRadius: "8px",
                         }}
-                        onClick={() => setRole('employee')}
+                        onClick={() => setRole("employee")}
                       >
                         {" "}
                         <Typography
@@ -281,8 +279,8 @@ const Signup = () => {
                         gutterBottom
                         fontWeight="bold"
                       >
-                       {/* //{isSubmitting ? "Loading..":"Sign Up"} */}
-                       Sign Up{" "}
+                        {/* //{isSubmitting ? "Loading..":"Sign Up"} */}
+                        Sign Up{" "}
                       </Typography>
                     }
                   </Button>
@@ -303,6 +301,29 @@ const Signup = () => {
                     variant="contained"
                     style={{
                       height: "45px",
+                      backgroundColor: "#3B5998",
+                      color: "white",
+                    }}
+                  >
+                    {
+                      <Typography
+                        variant="button"
+                        display="block"
+                        gutterBottom
+                        fontWeight="bold"
+                      >
+                       <Link href="/facebook" color="#FFFFFF">
+                      {"Facebook"}
+                    </Link>
+                      </Typography>
+                    }
+                  </Button>
+                </Box>
+                <Box display="grid" gap="10px" mt="20px">
+                  <Button
+                    variant="contained"
+                    style={{
+                      height: "45px",
                       backgroundColor: "#DB4437",
                       color: "white",
                     }}
@@ -314,9 +335,9 @@ const Signup = () => {
                         gutterBottom
                         fontWeight="bold"
                       >
-                      <Link href="/google" color="#FFFFFF">
-                      {"Google"}
-                    </Link>
+                        <Link href="/google" color="#FFFFFF">
+                          {"Google"}
+                        </Link>
                       </Typography>
                     }
                   </Button>
@@ -336,7 +357,7 @@ const Signup = () => {
                   </Typography>
                 </Box>
               </Form>
-           )}
+            )}
           </Formik>
         </Box>
       </Container>
