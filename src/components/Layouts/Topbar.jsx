@@ -12,7 +12,7 @@ import {
   Popover,
   ListItemIcon,
   Divider,
-  Button
+  Button,
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -24,8 +24,7 @@ import { useNavigate } from "react-router-dom";
 import i18n from "../../utils/i8n";
 import { useTranslation } from "react-i18next";
 import ConfirmationModal from "../Common/ConfirmationModal";
-import axios from 'axios';
-
+import axios from "axios";
 
 const Topbar = () => {
   const theme = useTheme();
@@ -47,27 +46,32 @@ const Topbar = () => {
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!token);
     if (token) {
-      axios.get('http://localhost:8000/api/token/validate/', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-        .then(response => setUserInfo(response.data))
-        .catch(error => console.error('Error fetching user info:', error));
+      axios
+        .get("http://localhost:8000/api/token/validate/", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => setUserInfo(response.data))
+        .catch((error) => console.error("Error fetching user info:", error));
     }
   }, []);
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    ...(userInfo && userInfo.role === 'employee' ? [
-      { label: "Find Job", href: "/employee/job-list" },
-      { label: "Dashboard", href: "/employee/dashboard" },
-    ] : userInfo && userInfo.role === 'employer' ? [
-      { label: "Find FreeLancer", href: "/employer/client-list" },
-      { label: "Post Job", href: "/employer/job-post" },
-      { label: "Dashboard Employer", href: "/employer/dashboard" },
-    ] : []),
+    ...(userInfo && userInfo.role === "employee"
+      ? [
+          { label: "Find Job", href: "/employee/job-list" },
+          { label: "Dashboard", href: "/employee/dashboard" },
+        ]
+      : userInfo && userInfo.role === "employer"
+      ? [
+          { label: "Find FreeLancer", href: "/employer/client-list" },
+          { label: "Post Job", href: "/employer/job-post" },
+          { label: "Dashboard Employer", href: "/employer/dashboard" },
+        ]
+      : []),
   ];
 
   const handleClick = (event, index) => {
@@ -140,9 +144,10 @@ const Topbar = () => {
   };
 
   const handleRegisterClick = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
+  console.log("isAuthenticated", isAuthenticated);
   return (
     <Box
       sx={{
@@ -233,7 +238,7 @@ const Topbar = () => {
             </Box>
           </>
         ) : (
-          <Button onClick={handleRegisterClick} style={{ marginRight: '16px' }}>
+          <Button onClick={handleRegisterClick} style={{ marginRight: "16px" }}>
             Register
           </Button>
         )}

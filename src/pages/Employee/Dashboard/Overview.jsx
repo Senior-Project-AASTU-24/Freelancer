@@ -78,41 +78,41 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   const colors = tokens(theme.palette.mode);
   const [userInfo, setUserInfo] = useState(null);
   const [jobApplied, setJobApplied] = useState(0);
-  
-    useEffect(() => {
-      const token = localStorage.getItem('token'); // Get the token from localStorage
-  
-      if (token) {
-        fetch('http://localhost:8000/api/token/validate/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Add the token to the Authorization header
-          }
-        })
-        .then(response => {
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Get the token from localStorage
+
+    if (token) {
+      fetch("http://localhost:8000/api/token/validate/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
+      })
+        .then((response) => {
           if (!response.ok) {
-            throw new Error('Failed to validate token');
+            throw new Error("Failed to validate token");
           }
           return response.json();
         })
-        .then(data => setUserInfo(data))
-        .catch(error => console.error('Error fetching user info:', error));
-      }
-        // Fetch job count
-        fetch('http://localhost:8002/api/job-applied/', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}` // Add the token to the Authorization header
-          }
-        })
-        .then(response => response.json())
-        .then(data => setJobApplied(data.job_applied_count)) // Adjusted to match backend response structure
-        .catch((error) => console.error('Error fetching job count:', error));
-    }, []);
-    if (!userInfo) {
-      return <div>No user information available</div>;
+        .then((data) => setUserInfo(data))
+        .catch((error) => console.error("Error fetching user info:", error));
     }
+    // Fetch job count
+    fetch("http://localhost:8002/api/job-applied/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setJobApplied(data.job_applied_count)) // Adjusted to match backend response structure
+      .catch((error) => console.error("Error fetching job count:", error));
+  }, []);
+  if (!userInfo) {
+    return <div>No user information available</div>;
+  }
   return (
     <MenuItem
       active={selected === title}
@@ -133,55 +133,57 @@ const Overview = () => {
   const colors = tokens(theme.palette.mode);
   const [jobApplied, setJobApplied] = useState(0);
   const [jobCompleted, setJobCompleted] = useState(0);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Get the token from localStorage
+    const token = localStorage.getItem("token"); // Get the token from localStorage
 
     if (token) {
-      fetch('http://localhost:8000/api/token/validate/', {
-        method: 'GET',
+      fetch("http://localhost:8000/api/token/validate/", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Add the token to the Authorization header
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to validate token');
-        }
-        return response.json();
-      })
-      .then(data => setUserInfo(data))
-      .catch(error => console.error('Error fetching user info:', error));
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to validate token");
+          }
+          return response.json();
+        })
+        .then((data) => setUserInfo(data))
+        .catch((error) => console.error("Error fetching user info:", error));
     }
 
-    fetch('http://localhost:8002/api/job-applied/', {
-      method: 'GET',
+    fetch("http://localhost:8002/api/job-applied/", {
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}` // Add the token to the Authorization header
-      }
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
     })
-    .then(response => response.json())
-    .then(data => setJobApplied(data.job_applied_count)) // Adjusted to match backend response structure
-    .catch((error) => console.error('Error fetching job count:', error));
+      .then((response) => response.json())
+      .then((data) => setJobApplied(data.job_applied_count)) // Adjusted to match backend response structure
+      .catch((error) => console.error("Error fetching job count:", error));
 
-    fetch('http://localhost:8002/api/job-completed/', {
-      method: 'GET',
+    fetch("http://localhost:8002/api/job-completed/", {
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}` // Add the token to the Authorization header
-      }
+        Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+      },
     })
-    .then(response => response.json())
-    .then(data => setJobCompleted(data.task_complete_count)) // Adjusted to match backend response structure
-    .catch((error) => console.error('Error fetching job count:', error));
+      .then((response) => response.json())
+      .then((data) => setJobCompleted(data.task_complete_count)) // Adjusted to match backend response structure
+      .catch((error) => console.error("Error fetching job count:", error));
   }, []);
 
   return (
     <div>
       {" "}
       <Box marginTop={5} marginRight={3}>
-        <Typography {...mediumTypographyProps}>Hello, 
-        {/* {userInfo.username} */}
+        <Typography {...mediumTypographyProps}>
+          Hello,
+          {/* {userInfo.username} */}
         </Typography>
         <Typography {...smallTypographyProps}>
           Here is your activities & career opportunities
