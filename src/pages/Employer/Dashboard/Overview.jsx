@@ -95,28 +95,41 @@ const Overview = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [userInfo, setUserInfo] = useState(null);
+  const [jobPosted, setJobPosted] = useState(0);
   
-    useEffect(() => {
-      const token = localStorage.getItem('token'); // Get the token from localStorage
-  
-      if (token) {
-        fetch('http://localhost:8000/api/token/validate/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Add the token to the Authorization header
-          }
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to validate token');
-          }
-          return response.json();
-        })
-        .then(data => setUserInfo(data))
-        .catch(error => console.error('Error fetching user info:', error));
+  useEffect(() => {
+    const token = localStorage.getItem('token'); // Get the token from localStorage
+
+    if (token) {
+      fetch('http://localhost:8000/api/token/validate/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Add the token to the Authorization header
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to validate token');
+        }
+        return response.json();
+      })
+      .then(data => setUserInfo(data))
+      .catch(error => console.error('Error fetching user info:', error));
+    }
+
+    fetch('http://localhost:8001/api/job-posted/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}` // Add the token to the Authorization header
       }
-    }, []);
+    })
+    .then(response => response.json())
+    .then(data => setJobPosted(data.job_posted)) // Adjusted to match backend response structure
+    .catch((error) => console.error('Error fetching job count:', error));
+
+    
+  }, []);
     if (!userInfo) {
       return <div>No user information available</div>;
     }
@@ -148,28 +161,10 @@ const Overview = () => {
             borderRadius={8}
           >
             <StatBox
-              title={"43"}
+              title={jobPosted}
               subtitle="Jobs Posted"
               icon={
                 <WorkHistoryIcon
-                  sx={{ color: colors.blueAccent[600], fontSize: "55px" }}
-                />
-              }
-            />
-          </Box>
-          <Box
-            gridColumn="span 4"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            borderRadius={8}
-          >
-            <StatBox
-              title={"10"}
-              subtitle="Favorites (clients)"
-              icon={
-                <BookmarkAddedIcon
                   sx={{ color: colors.blueAccent[600], fontSize: "55px" }}
                 />
               }

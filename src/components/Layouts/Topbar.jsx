@@ -12,6 +12,7 @@ import {
   Popover,
   ListItemIcon,
   Divider,
+  Button
 } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -23,6 +24,8 @@ import { useNavigate } from "react-router-dom";
 import i18n from "../../utils/i8n";
 import { useTranslation } from "react-i18next";
 import ConfirmationModal from "../Common/ConfirmationModal";
+import axios from 'axios';
+
 
 const Topbar = () => {
   const theme = useTheme();
@@ -41,29 +44,31 @@ const Topbar = () => {
   const [language, setLanguage] = useState("en");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState('');
-  
+  const [userInfo, setUserInfo] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
-
-    const role = localStorage.getItem('role');
-    setUserRole(role);
+    if (token) {
+      axios.get('http://localhost:8000/api/token/validate/', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(response => setUserInfo(response.data))
+        .catch(error => console.error('Error fetching user info:', error));
+    }
   }, []);
-
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    // ...(userRole === 'is_employee' ? [
+    ...(userInfo && userInfo.role === 'employee' ? [
       { label: "Find Job", href: "/employee/job-list" },
-      { label: "Post Job", href: "/employer/job-post" },
-    // ] : userRole === 'is_employer' ? [
+      { label: "Dashboard", href: "/employee/dashboard" },
+    ] : userInfo && userInfo.role === 'employer' ? [
       { label: "Find FreeLancer", href: "/employer/client-list" },
       { label: "Post Job", href: "/employer/job-post" },
       { label: "Dashboard Employer", href: "/employer/dashboard" },
-    // ] : []),
+    ] : []),
   ];
-
 
   const handleClick = (event, index) => {
     if (selectedBreadcrumb === index) {
@@ -181,12 +186,12 @@ const Topbar = () => {
         </Breadcrumbs>
       )}
       <div style={{ display: "flex", alignItems: "center" }}>
-      {isAuthenticated ? (
+        {isAuthenticated ? (
           <>
             <Box sx={{ marginRight: "16px" }}>
               <Avatar
                 alt="User Avatar"
-                src={user}
+                src={user} // Assuming userInfo has an avatar field
                 onClick={handleAvatarClick}
                 sx={{ cursor: "pointer" }}
               />
@@ -228,18 +233,9 @@ const Topbar = () => {
             </Box>
           </>
         ) : (
-          <button variant="contained"
-                    sx={{
-                      background: "white",
-                      borderRadius: "4px",
-                      color: "var(--Primary-500, #0A65CC)",
-                      padding: "10px 20px",
-                      "&:hover": {
-                        color: "white", // Change text color to white on hover
-                      },
-                    }}onClick={handleRegisterClick} style={{ marginRight: '16px' }}>
+          <Button onClick={handleRegisterClick} style={{ marginRight: '16px' }}>
             Register
-          </button>
+          </Button>
         )}
         <Select
           value={language}
